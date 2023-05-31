@@ -11,7 +11,7 @@ public interface GiftCertificateRepository {
 
     GiftCertificate findById(long id);
 
-    Optional<GiftCertificate> findByName(String name);
+    GiftCertificate findByName(String name);
 
     void saveOrUpdate(GiftCertificate certificate);
 

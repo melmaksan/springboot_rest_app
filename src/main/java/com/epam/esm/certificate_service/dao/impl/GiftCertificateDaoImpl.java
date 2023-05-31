@@ -3,6 +3,8 @@ package com.epam.esm.certificate_service.dao.impl;
 import com.epam.esm.certificate_service.dao.GiftCertificateRepository;
 import com.epam.esm.certificate_service.entities.GiftCertificate;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +25,10 @@ public class GiftCertificateDaoImpl implements GiftCertificateRepository {
     }
 
     @Override
-    public Optional<GiftCertificate> findByName(String paramName) {
-        return entityManager.createQuery("from GiftCertificate where name = " + paramName).getResultList().stream().findAny();
+    public GiftCertificate findByName(String paramName) throws NoResultException {
+        Query query = entityManager.createQuery("from GiftCertificate where name=:paramName");
+        query.setParameter("paramName", paramName);
+        return (GiftCertificate)query.getSingleResult();
     }
 
     @Override
@@ -40,8 +44,9 @@ public class GiftCertificateDaoImpl implements GiftCertificateRepository {
 
     @Override
     public List<GiftCertificate> findByPart(String part) {
-        return (List<GiftCertificate>) entityManager.createQuery
-                ("from GiftCertificate WHERE name LIKE %" + part + "% OR description LIKE %" + part + "%").getResultList();
+        Query query = entityManager.createQuery("from GiftCertificate WHERE name LIKE :part OR description LIKE :part");
+        query.setParameter("part", "%" + part + "%");
+        return (List<GiftCertificate>) query.getResultList();
     }
 
     @Override

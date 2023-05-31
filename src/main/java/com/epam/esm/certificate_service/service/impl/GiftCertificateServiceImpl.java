@@ -2,14 +2,15 @@ package com.epam.esm.certificate_service.service.impl;
 
 import com.epam.esm.certificate_service.dao.GiftCertificateRepository;
 import com.epam.esm.certificate_service.entities.GiftCertificate;
+import com.epam.esm.certificate_service.entities.Tag;
 import com.epam.esm.certificate_service.exeption_handling.exeptions.EmptyRequestBodyException;
 import com.epam.esm.certificate_service.exeption_handling.exeptions.NoSuchDataException;
 import com.epam.esm.certificate_service.service.GiftCertificateService;
+import jakarta.persistence.NoResultException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService {
@@ -35,11 +36,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public GiftCertificate getGiftCertificateByName(String name) {
-        Optional<GiftCertificate> certificateOptional = certificateRepository.findByName(name);
-
-        if (certificateOptional.isPresent()) {
-            return certificateOptional.get();
-        } else {
+        try {
+            return certificateRepository.findByName(name);
+        } catch (NoResultException ex){
             throw new NoSuchDataException("There is no certificate with name '" + name + "' in DB", CODE);
         }
     }
@@ -58,16 +57,37 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public void updateGiftCertificate(GiftCertificate giftCertificate) {
-        GiftCertificate certificate = certificateRepository.findById(giftCertificate.getId());
+    public void updateGiftCertificate(GiftCertificate updateCertificate) {
+        GiftCertificate certificate = certificateRepository.findById(updateCertificate.getId());
 
         if (certificate != null) {
-            giftCertificate.setLastUpdateDate(LocalDateTime.now());
-            certificateRepository.saveOrUpdate(giftCertificate);
+            fieldsUpdate(certificate, updateCertificate);
+            certificateRepository.saveOrUpdate(certificate);
         } else {
-            throw new NoSuchDataException("Can't update certificate with id '" + giftCertificate.getId() +
+            throw new NoSuchDataException("Can't update certificate with id '" + updateCertificate.getId() +
                     "' because it doesn't exist in DB", CODE);
         }
+    }
+
+    private void fieldsUpdate(GiftCertificate existCertificate, GiftCertificate updateCertificate) {
+        if (updateCertificate.getName() != null) {
+            existCertificate.setName(updateCertificate.getName());
+        }
+        if (updateCertificate.getDescription() != null) {
+            existCertificate.setDescription(updateCertificate.getDescription());
+        }
+        if (updateCertificate.getPrice() != 0) {
+            existCertificate.setPrice(updateCertificate.getPrice());
+        }
+        if (updateCertificate.getDuration() != 0) {
+            existCertificate.setDuration(updateCertificate.getDuration());
+        }
+        if (updateCertificate.getTags() != null) {
+            List<Tag> tags = existCertificate.getTags();
+            tags.addAll(updateCertificate.getTags());
+            existCertificate.setTags(tags);
+        }
+        existCertificate.setLastUpdateDate(LocalDateTime.now());
     }
 
     @Override
