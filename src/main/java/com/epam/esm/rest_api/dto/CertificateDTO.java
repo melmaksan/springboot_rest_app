@@ -68,6 +68,14 @@ public class CertificateDTO {
         this.createDate = createDate;
     }
 
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -82,11 +90,15 @@ public class CertificateDTO {
         return Objects.hash(name, description, price, duration, createDate);
     }
 
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
+    @Override
+    public String toString() {
+        return "CertificateDTO{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", duration=" + duration +
+                ", createDate=" + createDate +
+                ", tags=" + tags +
+                '}';
     }
 }

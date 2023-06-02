@@ -2,6 +2,7 @@ package com.epam.esm.rest_api.dto;
 
 import com.epam.esm.certificate_service.entities.GiftCertificate;
 import com.epam.esm.certificate_service.entities.Tag;
+import com.epam.esm.certificate_service.entities.User;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -19,7 +20,7 @@ public class Mapper {
         int duration = certificate.getDuration();
         LocalDate createDate = certificate.getCreateDate().toLocalDate();
         List<String> tags = new ArrayList<>();
-        if(certificate.getTags() != null) {
+        if (certificate.getTags() != null) {
             tags = certificate.getTags()
                     .stream()
                     .map(Tag::getName)
@@ -33,5 +34,13 @@ public class Mapper {
         String name = tag.getName();
 
         return new TagDTO(name);
+    }
+
+    public UserDTO toUserDto(User user) {
+        String name = user.getFirstName();
+        String surname = user.getSurname();
+        String email = user.getEmail();
+
+        return new UserDTO(name, surname, email);
     }
 }

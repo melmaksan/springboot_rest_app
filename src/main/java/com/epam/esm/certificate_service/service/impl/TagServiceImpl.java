@@ -24,29 +24,23 @@ public class TagServiceImpl implements TagService {
     @Override
     public Tag findById(int id) {
         Optional<Tag> optionalTag = tagRepository.findById(id);
-        Tag tag;
 
         if (optionalTag.isEmpty()) {
             throw new NoSuchDataException("There is no tag with id '" + id + "' in DB", CODE);
-        } else {
-            tag = optionalTag.get();
         }
 
-        return tag;
+        return optionalTag.get();
     }
 
     @Override
     public Tag findByName(String name) {
         Optional<Tag> optionalTag = tagRepository.findByName(name);
-        Tag tag;
 
         if (optionalTag.isEmpty()) {
             throw new NoSuchDataException("There is no tag with name '" + name + "' in DB", CODE);
-        } else {
-            tag = optionalTag.get();
         }
 
-        return tag;
+        return optionalTag.get();
     }
 
     @Override

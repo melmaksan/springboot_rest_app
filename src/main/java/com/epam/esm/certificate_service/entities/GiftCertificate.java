@@ -1,12 +1,12 @@
 package com.epam.esm.certificate_service.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,6 +40,7 @@ public class GiftCertificate {
     @JoinTable(name = "gift_certificate_has_tag",
             joinColumns = @JoinColumn(name = "gift_certificate_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @JsonManagedReference
     private List<Tag> tags;
 
     public long getId() {

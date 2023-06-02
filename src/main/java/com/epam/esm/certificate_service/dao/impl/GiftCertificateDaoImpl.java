@@ -70,7 +70,9 @@ public class GiftCertificateDaoImpl implements GiftCertificateRepository {
     }
 
     @Override
+    @Transactional
     public void deleteCertificate(long id) {
-        entityManager.createQuery("delete from GiftCertificate where id = " + id).executeUpdate();
+        GiftCertificate certificate = entityManager.find(GiftCertificate.class, id);
+        entityManager.remove(certificate);
     }
 }

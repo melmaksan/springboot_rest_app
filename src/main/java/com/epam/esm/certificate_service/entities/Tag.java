@@ -1,8 +1,8 @@
 package com.epam.esm.certificate_service.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,6 +22,7 @@ public class Tag {
     @JoinTable(name = "gift_certificate_has_tag",
             joinColumns = @JoinColumn(name = "tag_id"),
             inverseJoinColumns = @JoinColumn(name = "gift_certificate_id"))
+    @JsonBackReference
     private List<GiftCertificate> certificates;
 
     public Tag() {
