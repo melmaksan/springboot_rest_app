@@ -16,4 +16,6 @@ public interface TagService {
 
     void deleteTag(int id);
 
+    Tag getWidelyUsedTag(long id);
+
 }

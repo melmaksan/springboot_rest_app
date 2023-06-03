@@ -1,6 +1,7 @@
 package com.epam.esm.certificate_service.service.impl;
 
 import com.epam.esm.certificate_service.dao.GiftCertificateRepository;
+import com.epam.esm.certificate_service.dao.TagRepository;
 import com.epam.esm.certificate_service.entities.GiftCertificate;
 import com.epam.esm.certificate_service.entities.Tag;
 import com.epam.esm.certificate_service.exeption_handling.exeptions.EmptyRequestBodyException;
@@ -10,7 +11,9 @@ import jakarta.persistence.NoResultException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService {
@@ -18,9 +21,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private static final String CODE = "01";
 
     private final GiftCertificateRepository certificateRepository;
+    private final TagRepository tagRepository;
 
-    public GiftCertificateServiceImpl(GiftCertificateRepository certificateRepository) {
+    public GiftCertificateServiceImpl(GiftCertificateRepository certificateRepository, TagRepository tagRepository) {
         this.certificateRepository = certificateRepository;
+        this.tagRepository = tagRepository;
     }
 
     @Override
@@ -53,6 +58,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             throw new EmptyRequestBodyException("Fields name, description and createDate " +
                     "are required, please try again!", CODE);
         }
+
+        if (giftCertificate.getTags() != null) {
+            List<Tag> tags = checkTags(giftCertificate);
+            giftCertificate.setTags(tags);
+        }
+
         certificateRepository.saveOrUpdate(giftCertificate);
     }
 
@@ -62,11 +73,27 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
         if (certificate != null) {
             fieldsUpdate(certificate, updateCertificate);
+            List<Tag> tags = checkTags(certificate);
+            certificate.setTags(tags);
             certificateRepository.saveOrUpdate(certificate);
         } else {
             throw new NoSuchDataException("Can't update certificate with id '" + updateCertificate.getId() +
                     "' because it doesn't exist in DB", CODE);
         }
+    }
+
+    private List<Tag> checkTags(GiftCertificate certificate) {
+        List<Tag> tagList = certificate.getTags();
+        List<Tag> checkedTags = new ArrayList<>();
+        for (Tag tag : tagList) {
+            try {
+                Tag existTag = tagRepository.findByName(tag.getName());
+                checkedTags.add(existTag);
+            } catch (NoResultException ex) {
+                checkedTags.add(tag);
+            }
+        }
+        return checkedTags;
     }
 
     private void fieldsUpdate(GiftCertificate existCertificate, GiftCertificate updateCertificate) {
@@ -130,6 +157,20 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public List<GiftCertificate> sortGiftCertificatesByNameDesc() {
         return certificateRepository.descByName();
+    }
+
+    @Override
+    public List<GiftCertificate> getCertificatesByTags(Tag[] tags) {
+        List<GiftCertificate> giftCertificates = new ArrayList<>();
+        for (Tag tag : tags) {
+            try {
+                Tag existTag = tagRepository.findByName(tag.getName());
+                giftCertificates.addAll(existTag.getCertificates());
+            } catch (NoResultException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return giftCertificates.stream().distinct().collect(Collectors.toList());
     }
 
 }

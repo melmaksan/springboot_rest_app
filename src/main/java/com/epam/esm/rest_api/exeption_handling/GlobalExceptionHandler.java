@@ -21,13 +21,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(data, HttpStatus.BAD_REQUEST);
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<CertificateIncorrectData> handleAllException(Exception exception){
-//        CertificateIncorrectData data = new CertificateIncorrectData();
-//        data.setErrorMessage(exception.getMessage());
-//        data.setErrorCode(HttpStatus.BAD_REQUEST.value());
-//
-//        return new ResponseEntity<>(data, HttpStatus.BAD_REQUEST);
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<CertificateIncorrectData> handleAllException(Exception exception){
+        CertificateIncorrectData data = new CertificateIncorrectData();
+        data.setErrorMessage(exception.getMessage());
+        data.setErrorCode(HttpStatus.BAD_REQUEST.value());
+
+        return new ResponseEntity<>(data, HttpStatus.BAD_REQUEST);
+    }
 
 }

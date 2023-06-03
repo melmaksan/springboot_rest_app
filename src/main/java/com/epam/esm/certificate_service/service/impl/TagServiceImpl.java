@@ -5,10 +5,10 @@ import com.epam.esm.certificate_service.entities.Tag;
 import com.epam.esm.certificate_service.exeption_handling.exeptions.EmptyRequestBodyException;
 import com.epam.esm.certificate_service.exeption_handling.exeptions.NoSuchDataException;
 import com.epam.esm.certificate_service.service.TagService;
+import jakarta.persistence.NoResultException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TagServiceImpl implements TagService {
@@ -23,24 +23,22 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag findById(int id) {
-        Optional<Tag> optionalTag = tagRepository.findById(id);
+        Tag tag = tagRepository.findById(id);
 
-        if (optionalTag.isEmpty()) {
+        if (tag != null) {
+            return tag;
+        } else {
             throw new NoSuchDataException("There is no tag with id '" + id + "' in DB", CODE);
         }
-
-        return optionalTag.get();
     }
 
     @Override
     public Tag findByName(String name) {
-        Optional<Tag> optionalTag = tagRepository.findByName(name);
-
-        if (optionalTag.isEmpty()) {
+        try {
+            return tagRepository.findByName(name);
+        } catch (NoResultException ex) {
             throw new NoSuchDataException("There is no tag with name '" + name + "' in DB", CODE);
         }
-
-        return optionalTag.get();
     }
 
     @Override
@@ -58,13 +56,20 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void deleteTag(int id) {
-        Optional<Tag> optionalTag = tagRepository.findById(id);
-        if (optionalTag.isPresent()) {
-            tagRepository.deleteById(optionalTag.get().getId());
+        Tag tag = tagRepository.findById(id);
+
+        if (tag != null) {
+            tagRepository.deleteById(id);
         } else {
             throw new NoSuchDataException("Can't delete tag with id '" + id +
                     "' because it doesn't exist in DB", CODE);
         }
+    }
+
+    @Override
+    public Tag getWidelyUsedTag(long id) {
+        int tagId = tagRepository.getWidelyUsedTag(id);
+        return tagRepository.findById(tagId);
     }
 
 }

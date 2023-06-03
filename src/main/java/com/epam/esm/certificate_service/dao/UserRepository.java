@@ -1,6 +1,5 @@
 package com.epam.esm.certificate_service.dao;
 
-import com.epam.esm.certificate_service.entities.Tag;
 import com.epam.esm.certificate_service.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,11 +1,13 @@
 package com.epam.esm.rest_api.dto;
 
 import com.epam.esm.certificate_service.entities.GiftCertificate;
+import com.epam.esm.certificate_service.entities.Order;
 import com.epam.esm.certificate_service.entities.Tag;
 import com.epam.esm.certificate_service.entities.User;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,5 +44,13 @@ public class Mapper {
         String email = user.getEmail();
 
         return new UserDTO(name, surname, email);
+    }
+
+    public OrderDTO toOrderDto(Order order) {
+        int price = order.getPrice();
+        LocalDateTime dateTime = order.getTime();
+        CertificateDTO certificateDTO = toCertificateDto(order.getCertificate());
+
+        return new OrderDTO(price, dateTime, certificateDTO);
     }
 }

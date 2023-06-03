@@ -1,11 +1,20 @@
 package com.epam.esm.certificate_service.dao;
 
 import com.epam.esm.certificate_service.entities.Tag;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import java.util.List;
 
-public interface TagRepository extends JpaRepository<Tag, Integer> {
+public interface TagRepository {
 
-    Optional<Tag> findByName(String name);
+    Tag findByName(String name);
+
+    Integer getWidelyUsedTag(long id);
+
+    Tag findById(int id);
+
+    List<Tag> findAll();
+
+    void save(Tag tag);
+
+    void deleteById(int id);
 }

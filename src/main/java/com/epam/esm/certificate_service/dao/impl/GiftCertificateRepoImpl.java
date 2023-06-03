@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Repository
-public class GiftCertificateDaoImpl implements GiftCertificateRepository {
+public class GiftCertificateRepoImpl implements GiftCertificateRepository {
 
     private final EntityManager entityManager;
 
-    public GiftCertificateDaoImpl(EntityManager entityManager) {
+    public GiftCertificateRepoImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
@@ -28,7 +28,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateRepository {
     public GiftCertificate findByName(String paramName) throws NoResultException {
         Query query = entityManager.createQuery("from GiftCertificate where name=:paramName");
         query.setParameter("paramName", paramName);
-        return (GiftCertificate)query.getSingleResult();
+        return (GiftCertificate) query.getSingleResult();
     }
 
     @Override

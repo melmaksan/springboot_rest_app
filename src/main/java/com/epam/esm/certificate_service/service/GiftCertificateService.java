@@ -1,6 +1,7 @@
 package com.epam.esm.certificate_service.service;
 
 import com.epam.esm.certificate_service.entities.GiftCertificate;
+import com.epam.esm.certificate_service.entities.Tag;
 
 import java.util.List;
 
@@ -12,9 +13,9 @@ public interface GiftCertificateService {
 
     List<GiftCertificate> getAllGiftCertificates();
 
-    void addGiftCertificate(GiftCertificate userDetail);
+    void addGiftCertificate(GiftCertificate certificate);
 
-    void updateGiftCertificate(GiftCertificate userDetail);
+    void updateGiftCertificate(GiftCertificate certificate);
 
     void deleteGiftCertificate(long id);
 
@@ -28,4 +29,5 @@ public interface GiftCertificateService {
 
     List<GiftCertificate> sortGiftCertificatesByNameDesc();
 
+    List<GiftCertificate> getCertificatesByTags(Tag[] tags);
 }

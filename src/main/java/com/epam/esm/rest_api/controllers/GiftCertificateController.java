@@ -41,13 +41,6 @@ public class GiftCertificateController {
                 .stream().map(mapper::toCertificateDto).collect(Collectors.toList());
     }
 
-    @GetMapping(value = "/certificates/findByTag/{name}")
-    public List<CertificateDTO> getGiftCertificatesByTag(@PathVariable String name) {
-        Tag tag = tagService.findByName(name);
-        return tag.getCertificates().stream().map(mapper::toCertificateDto).collect(Collectors.toList());
-    }
-
-
     @GetMapping("/certificates")
     public List<CertificateDTO> getAllCertificates() {
         return giftCertificateService.getAllGiftCertificates()
@@ -95,4 +88,17 @@ public class GiftCertificateController {
         giftCertificateService.updateGiftCertificate(giftCertificate);
         return getCertificateById(giftCertificate.getId());
     }
+
+    @GetMapping(value = "/certificates/findByTag/{name}")
+    public List<CertificateDTO> getGiftCertificatesByTag(@PathVariable String name) {
+        Tag tag = tagService.findByName(name);
+        return tag.getCertificates().stream().map(mapper::toCertificateDto).collect(Collectors.toList());
+    }
+
+    @GetMapping(value = "/certificates/findByTags")
+    public List<CertificateDTO> getGiftCertificatesByTags(@RequestBody Tag... tags) {
+        List<GiftCertificate> certificateList = giftCertificateService.getCertificatesByTags(tags);
+        return certificateList.stream().map(mapper::toCertificateDto).collect(Collectors.toList());
+    }
+
 }
