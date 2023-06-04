@@ -12,7 +12,7 @@ public interface TagRepository {
 
     Tag findById(int id);
 
-    List<Tag> findAll();
+    List<Tag> findAll(int pageSize, int offset);
 
     void save(Tag tag);
 

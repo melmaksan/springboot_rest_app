@@ -11,7 +11,7 @@ public interface UserService {
 
     User findByName(String userName);
 
-    List<User> getAllUsers();
+    List<User> getAllUsers(int pageSize, int offset);
 
     void buyCertificate(User user, String certificateName);
 }

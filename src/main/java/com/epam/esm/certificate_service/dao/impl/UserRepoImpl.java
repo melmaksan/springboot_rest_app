@@ -32,8 +32,11 @@ public class UserRepoImpl implements UserRepository {
     }
 
     @Override
-    public List<User> findAll() {
-        return entityManager.createQuery("select u from User u", User.class).getResultList();
+    public List<User> findAll(int pageSize, int offset) {
+        TypedQuery<User> query = entityManager.createQuery("select u from User u", User.class);
+        query.setFirstResult(offset);
+        query.setMaxResults(pageSize);
+        return query.getResultList();
     }
 
     @Override

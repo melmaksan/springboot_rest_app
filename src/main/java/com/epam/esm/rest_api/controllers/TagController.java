@@ -32,8 +32,15 @@ public class TagController {
     }
 
     @GetMapping(value = "/tags")
-    public List<TagDTO> showTags() {
-        return tagService.getAllTags().stream().map(mapper::toTagDto).collect(Collectors.toList());
+    public List<TagDTO> showTags(@RequestParam("page") int page, @RequestParam("size") int size) {
+        if (size == 0 || size < 0) {
+            size = 5;
+        }
+        if (page == 0 || page < 0) {
+            page = 1;
+        }
+
+        return tagService.getAllTags(size, (page-1)*size).stream().map(mapper::toTagDto).collect(Collectors.toList());
     }
 
     @DeleteMapping(value = "/tags/{id}")

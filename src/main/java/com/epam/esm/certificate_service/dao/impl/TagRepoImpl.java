@@ -29,15 +29,15 @@ public class TagRepoImpl implements TagRepository {
 
     @Override
     public Integer getWidelyUsedTag(long userId) {
-        Query query = entityManager.createQuery
+        TypedQuery<Integer> query = entityManager.createQuery
                 ("select tag.id from Tag as tag, Order as order " +
                         "join tag.certificates as certificates " +
                         "where order.certificate=certificates and order.user.id = :userId " +
                         "group by tag.id " +
-                        "order by count(tag.id) desc, sum(order.price) desc, tag.id");
+                        "order by count(tag.id) desc, sum(order.price) desc, tag.id", Integer.class);
         query.setParameter("userId", userId);
         query.setMaxResults(1);
-        return (Integer) (query.getSingleResult());
+        return query.getSingleResult();
     }
 
     @Override
@@ -46,8 +46,11 @@ public class TagRepoImpl implements TagRepository {
     }
 
     @Override
-    public List<Tag> findAll() {
-        return entityManager.createQuery("select t from Tag t", Tag.class).getResultList();
+    public List<Tag> findAll(int pageSize, int offset) {
+        TypedQuery<Tag> query = entityManager.createQuery("select t from Tag t", Tag.class);
+        query.setFirstResult(offset);
+        query.setMaxResults(pageSize);
+        return query.getResultList();
     }
 
     @Override

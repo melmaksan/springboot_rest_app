@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface GiftCertificateRepository {
 
-    List<GiftCertificate> findAll();
+    List<GiftCertificate> findAll(int pageSize, int offset);
 
     GiftCertificate findById(long id);
 
@@ -19,11 +19,11 @@ public interface GiftCertificateRepository {
 
     List<GiftCertificate> findByPart(String part);
 
-    List<GiftCertificate> ascByDate();
+    List<GiftCertificate> ascByDate(int pageSize, int offset);
 
-    List<GiftCertificate> descByDate();
+    List<GiftCertificate> descByDate(int pageSize, int offset);
 
-    List<GiftCertificate> ascByName();
+    List<GiftCertificate> ascByName(int pageSize, int offset);
 
-    List<GiftCertificate> descByName();
+    List<GiftCertificate> descByName(int pageSize, int offset);
 }

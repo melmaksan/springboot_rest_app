@@ -42,32 +42,63 @@ public class GiftCertificateController {
     }
 
     @GetMapping("/certificates")
-    public List<CertificateDTO> getAllCertificates() {
-        return giftCertificateService.getAllGiftCertificates()
+    public List<CertificateDTO> getAllCertificates(@RequestParam("page") int page, @RequestParam("size") int size) {
+        if (size == 0 || size < 0) {
+            size = 5;
+        }
+        if (page == 0 || page < 0) {
+            page = 1;
+        }
+
+        return giftCertificateService.getAllGiftCertificates(size, (page-1)*size)
                 .stream().map(mapper::toCertificateDto).collect(Collectors.toList());
     }
 
     @GetMapping(value = "/certificates/ascDate")
-    public List<CertificateDTO> getCertificatesAscDate() {
-        return giftCertificateService.sortGiftCertificatesByDateAsc()
+    public List<CertificateDTO> getCertificatesAscDate(@RequestParam("page") int page, @RequestParam("size") int size) {
+        if (size == 0 || size < 0) {
+            size = 5;
+        }
+        if (page == 0 || page < 0) {
+            page = 1;
+        }
+        return giftCertificateService.sortGiftCertificatesByDateAsc(size, (page-1)*size)
                 .stream().map(mapper::toCertificateDto).collect(Collectors.toList());
     }
 
     @GetMapping(value = "/certificates/descDate")
-    public List<CertificateDTO> getCertificatesDescDate() {
-        return giftCertificateService.sortGiftCertificatesByDateDesc()
+    public List<CertificateDTO> getCertificatesDescDate(@RequestParam("page") int page, @RequestParam("size") int size) {
+        if (size == 0 || size < 0) {
+            size = 5;
+        }
+        if (page == 0 || page < 0) {
+            page = 1;
+        }
+        return giftCertificateService.sortGiftCertificatesByDateDesc(size, (page-1)*size)
                 .stream().map(mapper::toCertificateDto).collect(Collectors.toList());
     }
 
     @GetMapping(value = "/certificates/ascName")
-    public List<CertificateDTO> getCertificatesAscName() {
-        return giftCertificateService.sortGiftCertificatesByNameAsc()
+    public List<CertificateDTO> getCertificatesAscName(@RequestParam("page") int page, @RequestParam("size") int size) {
+        if (size == 0 || size < 0) {
+            size = 5;
+        }
+        if (page == 0 || page < 0) {
+            page = 1;
+        }
+        return giftCertificateService.sortGiftCertificatesByNameAsc(size, (page-1)*size)
                 .stream().map(mapper::toCertificateDto).collect(Collectors.toList());
     }
 
     @GetMapping(value = "/certificates/descName")
-    public List<CertificateDTO> getCertificatesDescName() {
-        return giftCertificateService.sortGiftCertificatesByNameDesc()
+    public List<CertificateDTO> getCertificatesDescName(@RequestParam("page") int page, @RequestParam("size") int size) {
+        if (size == 0 || size < 0) {
+            size = 5;
+        }
+        if (page == 0 || page < 0) {
+            page = 1;
+        }
+        return giftCertificateService.sortGiftCertificatesByNameDesc(size, (page-1)*size)
                 .stream().map(mapper::toCertificateDto).collect(Collectors.toList());
     }
 
@@ -100,5 +131,4 @@ public class GiftCertificateController {
         List<GiftCertificate> certificateList = giftCertificateService.getCertificatesByTags(tags);
         return certificateList.stream().map(mapper::toCertificateDto).collect(Collectors.toList());
     }
-
 }

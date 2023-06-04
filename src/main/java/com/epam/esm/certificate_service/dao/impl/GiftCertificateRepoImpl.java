@@ -33,9 +33,12 @@ public class GiftCertificateRepoImpl implements GiftCertificateRepository {
     }
 
     @Override
-    public List<GiftCertificate> findAll() {
-        return entityManager.createQuery("select g from GiftCertificate g",
-                GiftCertificate.class).getResultList();
+    public List<GiftCertificate> findAll(int pageSize, int offset) {
+        TypedQuery<GiftCertificate> query = entityManager.createQuery("select g from GiftCertificate g",
+                GiftCertificate.class);
+        query.setFirstResult(offset);
+        query.setMaxResults(pageSize);
+        return query.getResultList();
     }
 
     @Override
@@ -54,27 +57,39 @@ public class GiftCertificateRepoImpl implements GiftCertificateRepository {
     }
 
     @Override
-    public List<GiftCertificate> ascByDate() {
-        return entityManager.createQuery("select g from GiftCertificate g ORDER BY g.createDate ASC",
-                GiftCertificate.class).getResultList();
+    public List<GiftCertificate> ascByDate(int pageSize, int offset) {
+        TypedQuery<GiftCertificate> query = entityManager.createQuery
+                ("select g from GiftCertificate g ORDER BY g.createDate ASC", GiftCertificate.class);
+        query.setFirstResult(offset);
+        query.setMaxResults(pageSize);
+        return query.getResultList();
     }
 
     @Override
-    public List<GiftCertificate> descByDate() {
-        return entityManager.createQuery("select g from GiftCertificate g ORDER BY g.createDate DESC",
-                GiftCertificate.class).getResultList();
+    public List<GiftCertificate> descByDate(int pageSize, int offset) {
+        TypedQuery<GiftCertificate> query = entityManager.createQuery
+                ("select g from GiftCertificate g ORDER BY g.createDate DESC", GiftCertificate.class);
+        query.setFirstResult(offset);
+        query.setMaxResults(pageSize);
+        return query.getResultList();
     }
 
     @Override
-    public List<GiftCertificate> ascByName() {
-        return entityManager.createQuery("select g from GiftCertificate g ORDER BY g.name ASC",
-                GiftCertificate.class).getResultList();
+    public List<GiftCertificate> ascByName(int pageSize, int offset) {
+        TypedQuery<GiftCertificate> query = entityManager.createQuery
+                ("select g from GiftCertificate g ORDER BY g.name ASC", GiftCertificate.class);
+        query.setFirstResult(offset);
+        query.setMaxResults(pageSize);
+        return query.getResultList();
     }
 
     @Override
-    public List<GiftCertificate> descByName() {
-        return entityManager.createQuery("select g from GiftCertificate g ORDER BY g.name DESC",
-                GiftCertificate.class).getResultList();
+    public List<GiftCertificate> descByName(int pageSize, int offset) {
+        TypedQuery<GiftCertificate> query = entityManager.createQuery
+                ("select g from GiftCertificate g ORDER BY g.name DESC", GiftCertificate.class);
+        query.setFirstResult(offset);
+        query.setMaxResults(pageSize);
+        return query.getResultList();
     }
 
     @Override

@@ -10,7 +10,7 @@ public interface UserRepository {
 
     User findById(long id);
 
-    List<User> findAll();
+    List<User> findAll(int pageSize, int offset);
 
     void save(User user);
 

@@ -11,7 +11,7 @@ public interface GiftCertificateService {
 
     GiftCertificate getGiftCertificateByName(String name);
 
-    List<GiftCertificate> getAllGiftCertificates();
+    List<GiftCertificate> getAllGiftCertificates(int pageSize, int offset);
 
     void addGiftCertificate(GiftCertificate certificate);
 
@@ -21,13 +21,13 @@ public interface GiftCertificateService {
 
     List<GiftCertificate> getGiftCertificatesByPart(String part);
 
-    List<GiftCertificate> sortGiftCertificatesByDateAsc();
+    List<GiftCertificate> sortGiftCertificatesByDateAsc(int pageSize, int offset);
 
-    List<GiftCertificate> sortGiftCertificatesByDateDesc();
+    List<GiftCertificate> sortGiftCertificatesByDateDesc(int pageSize, int offset);
 
-    List<GiftCertificate> sortGiftCertificatesByNameAsc();
+    List<GiftCertificate> sortGiftCertificatesByNameAsc(int pageSize, int offset);
 
-    List<GiftCertificate> sortGiftCertificatesByNameDesc();
+    List<GiftCertificate> sortGiftCertificatesByNameDesc(int pageSize, int offset);
 
     List<GiftCertificate> getCertificatesByTags(Tag[] tags);
 }

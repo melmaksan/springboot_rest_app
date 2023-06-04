@@ -130,8 +130,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificate> getAllGiftCertificates() {
-        return certificateRepository.findAll();
+    public List<GiftCertificate> getAllGiftCertificates(int pageSize, int offset) {
+        return certificateRepository.findAll(pageSize, offset);
     }
 
     @Override
@@ -140,23 +140,23 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificate> sortGiftCertificatesByDateAsc() {
-        return certificateRepository.ascByDate();
+    public List<GiftCertificate> sortGiftCertificatesByDateAsc(int pageSize, int offset) {
+        return certificateRepository.ascByDate(pageSize, offset);
     }
 
     @Override
-    public List<GiftCertificate> sortGiftCertificatesByDateDesc() {
-        return certificateRepository.descByDate();
+    public List<GiftCertificate> sortGiftCertificatesByDateDesc(int pageSize, int offset) {
+        return certificateRepository.descByDate(pageSize, offset);
     }
 
     @Override
-    public List<GiftCertificate> sortGiftCertificatesByNameAsc() {
-        return certificateRepository.ascByName();
+    public List<GiftCertificate> sortGiftCertificatesByNameAsc(int pageSize, int offset) {
+        return certificateRepository.ascByName(pageSize, offset);
     }
 
     @Override
-    public List<GiftCertificate> sortGiftCertificatesByNameDesc() {
-        return certificateRepository.descByName();
+    public List<GiftCertificate> sortGiftCertificatesByNameDesc(int pageSize, int offset) {
+        return certificateRepository.descByName(pageSize, offset);
     }
 
     @Override

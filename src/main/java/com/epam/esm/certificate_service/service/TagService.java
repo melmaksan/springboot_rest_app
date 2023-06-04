@@ -10,7 +10,7 @@ public interface TagService {
 
     Tag findByName(String name);
 
-    List<Tag> getAllTags();
+    List<Tag> getAllTags(int pageSize, int offset);
 
     void addTag(Tag tag);
 
