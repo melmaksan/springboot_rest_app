@@ -4,10 +4,15 @@ import com.epam.esm.certificate_service.entities.Tag;
 import com.epam.esm.certificate_service.service.TagService;
 import com.epam.esm.rest_api.dto.Mapper;
 import com.epam.esm.rest_api.dto.TagDTO;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api")
@@ -32,15 +37,15 @@ public class TagController {
     }
 
     @GetMapping(value = "/tags")
-    public List<TagDTO> showTags(@RequestParam("page") int page, @RequestParam("size") int size) {
-        if (size == 0 || size < 0) {
-            size = 5;
-        }
-        if (page == 0 || page < 0) {
-            page = 1;
-        }
+    public List<TagDTO> showTags(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                 @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
+        List<Tag> tagList = tagService.getAllTags(size, (page - 1) * size);
+//        tagList.forEach(tag -> tag.add(linkTo(TagController.class).slash(tag.getId()).withSelfRel()));
 
-        return tagService.getAllTags(size, (page-1)*size).stream().map(mapper::toTagDto).collect(Collectors.toList());
+        List<TagDTO> dtoList = tagList.stream().map(mapper::toTagDto).collect(Collectors.toList());
+//        Link link = linkTo(TagController.class).slash("tags").withSelfRel();
+
+        return dtoList;
     }
 
     @DeleteMapping(value = "/tags/{id}")

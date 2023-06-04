@@ -42,63 +42,47 @@ public class GiftCertificateController {
     }
 
     @GetMapping("/certificates")
-    public List<CertificateDTO> getAllCertificates(@RequestParam("page") int page, @RequestParam("size") int size) {
-        if (size == 0 || size < 0) {
-            size = 5;
-        }
-        if (page == 0 || page < 0) {
-            page = 1;
-        }
+    public List<CertificateDTO> getAllCertificates(
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
 
-        return giftCertificateService.getAllGiftCertificates(size, (page-1)*size)
+        return giftCertificateService.getAllGiftCertificates(size, (page - 1) * size)
                 .stream().map(mapper::toCertificateDto).collect(Collectors.toList());
     }
 
     @GetMapping(value = "/certificates/ascDate")
-    public List<CertificateDTO> getCertificatesAscDate(@RequestParam("page") int page, @RequestParam("size") int size) {
-        if (size == 0 || size < 0) {
-            size = 5;
-        }
-        if (page == 0 || page < 0) {
-            page = 1;
-        }
-        return giftCertificateService.sortGiftCertificatesByDateAsc(size, (page-1)*size)
+    public List<CertificateDTO> getCertificatesAscDate(
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
+
+        return giftCertificateService.sortGiftCertificatesByDateAsc(size, (page - 1) * size)
                 .stream().map(mapper::toCertificateDto).collect(Collectors.toList());
     }
 
     @GetMapping(value = "/certificates/descDate")
-    public List<CertificateDTO> getCertificatesDescDate(@RequestParam("page") int page, @RequestParam("size") int size) {
-        if (size == 0 || size < 0) {
-            size = 5;
-        }
-        if (page == 0 || page < 0) {
-            page = 1;
-        }
-        return giftCertificateService.sortGiftCertificatesByDateDesc(size, (page-1)*size)
+    public List<CertificateDTO> getCertificatesDescDate(
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
+
+        return giftCertificateService.sortGiftCertificatesByDateDesc(size, (page - 1) * size)
                 .stream().map(mapper::toCertificateDto).collect(Collectors.toList());
     }
 
     @GetMapping(value = "/certificates/ascName")
-    public List<CertificateDTO> getCertificatesAscName(@RequestParam("page") int page, @RequestParam("size") int size) {
-        if (size == 0 || size < 0) {
-            size = 5;
-        }
-        if (page == 0 || page < 0) {
-            page = 1;
-        }
-        return giftCertificateService.sortGiftCertificatesByNameAsc(size, (page-1)*size)
+    public List<CertificateDTO> getCertificatesAscName(
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
+
+        return giftCertificateService.sortGiftCertificatesByNameAsc(size, (page - 1) * size)
                 .stream().map(mapper::toCertificateDto).collect(Collectors.toList());
     }
 
     @GetMapping(value = "/certificates/descName")
-    public List<CertificateDTO> getCertificatesDescName(@RequestParam("page") int page, @RequestParam("size") int size) {
-        if (size == 0 || size < 0) {
-            size = 5;
-        }
-        if (page == 0 || page < 0) {
-            page = 1;
-        }
-        return giftCertificateService.sortGiftCertificatesByNameDesc(size, (page-1)*size)
+    public List<CertificateDTO> getCertificatesDescName(
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
+
+        return giftCertificateService.sortGiftCertificatesByNameDesc(size, (page - 1) * size)
                 .stream().map(mapper::toCertificateDto).collect(Collectors.toList());
     }
 

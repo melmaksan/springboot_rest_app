@@ -2,13 +2,14 @@ package com.epam.esm.certificate_service.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "orders")
-public class Order {
+public class Order extends RepresentationModel<Order> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

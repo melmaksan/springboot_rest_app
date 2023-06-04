@@ -5,6 +5,7 @@ import com.epam.esm.certificate_service.dao.TagRepository;
 import com.epam.esm.certificate_service.entities.GiftCertificate;
 import com.epam.esm.certificate_service.entities.Tag;
 import com.epam.esm.certificate_service.exeption_handling.exeptions.EmptyRequestBodyException;
+import com.epam.esm.certificate_service.exeption_handling.exeptions.InvalidRequestParamException;
 import com.epam.esm.certificate_service.exeption_handling.exeptions.NoSuchDataException;
 import com.epam.esm.certificate_service.service.GiftCertificateService;
 import jakarta.persistence.NoResultException;
@@ -131,7 +132,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<GiftCertificate> getAllGiftCertificates(int pageSize, int offset) {
-        return certificateRepository.findAll(pageSize, offset);
+        if (pageSize > 0 && offset >= 0) {
+            return certificateRepository.findAll(pageSize, offset);
+        } else {
+            throw new InvalidRequestParamException("Page number or size can't be 0 or negative", CODE);
+        }
     }
 
     @Override
@@ -141,22 +146,38 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<GiftCertificate> sortGiftCertificatesByDateAsc(int pageSize, int offset) {
-        return certificateRepository.ascByDate(pageSize, offset);
+        if (pageSize > 0 && offset >= 0) {
+            return certificateRepository.ascByDate(pageSize, offset);
+        } else {
+            throw new InvalidRequestParamException("Page number or size can't be 0 or negative", CODE);
+        }
     }
 
     @Override
     public List<GiftCertificate> sortGiftCertificatesByDateDesc(int pageSize, int offset) {
-        return certificateRepository.descByDate(pageSize, offset);
+        if (pageSize > 0 && offset >= 0) {
+            return certificateRepository.descByDate(pageSize, offset);
+        } else {
+            throw new InvalidRequestParamException("Page number or size can't be 0 or negative", CODE);
+        }
     }
 
     @Override
     public List<GiftCertificate> sortGiftCertificatesByNameAsc(int pageSize, int offset) {
-        return certificateRepository.ascByName(pageSize, offset);
+        if (pageSize > 0 && offset >= 0) {
+            return certificateRepository.ascByName(pageSize, offset);
+        } else {
+            throw new InvalidRequestParamException("Page number or size can't be 0 or negative", CODE);
+        }
     }
 
     @Override
     public List<GiftCertificate> sortGiftCertificatesByNameDesc(int pageSize, int offset) {
-        return certificateRepository.descByName(pageSize, offset);
+        if (pageSize > 0 && offset >= 0) {
+            return certificateRepository.descByName(pageSize, offset);
+        } else {
+            throw new InvalidRequestParamException("Page number or size can't be 0 or negative", CODE);
+        }
     }
 
     @Override

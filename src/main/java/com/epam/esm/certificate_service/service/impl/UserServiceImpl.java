@@ -4,6 +4,7 @@ import com.epam.esm.certificate_service.dao.UserRepository;
 import com.epam.esm.certificate_service.entities.GiftCertificate;
 import com.epam.esm.certificate_service.entities.Order;
 import com.epam.esm.certificate_service.entities.User;
+import com.epam.esm.certificate_service.exeption_handling.exeptions.InvalidRequestParamException;
 import com.epam.esm.certificate_service.exeption_handling.exeptions.NoSuchDataException;
 import com.epam.esm.certificate_service.service.GiftCertificateService;
 import com.epam.esm.certificate_service.service.UserService;
@@ -50,7 +51,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers(int pageSize, int offset) {
-        return userRepository.findAll(pageSize, offset);
+        if (pageSize > 0 && offset >= 0) {
+            return userRepository.findAll(pageSize, offset);
+        } else {
+            throw new InvalidRequestParamException("Page number or size can't be 0 or negative", CODE);
+        }
     }
 
     @Override

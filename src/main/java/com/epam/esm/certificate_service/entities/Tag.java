@@ -2,13 +2,14 @@ package com.epam.esm.certificate_service.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "tag")
-public class Tag {
+public class Tag extends RepresentationModel<Tag> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

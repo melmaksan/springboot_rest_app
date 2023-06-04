@@ -38,14 +38,9 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public List<UserDTO> getAllUsers(@RequestParam("page") int page, @RequestParam("size") int size) {
-        if (size == 0 || size < 0) {
-            size = 5;
-        }
-        if (page == 0 || page < 0) {
-            page = 1;
-        }
-        return userService.getAllUsers(size, (page-1)*size)
+    public List<UserDTO> getAllUsers(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                     @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
+        return userService.getAllUsers(size, (page - 1) * size)
                 .stream().map(mapper::toUserDto).collect(Collectors.toList());
     }
 

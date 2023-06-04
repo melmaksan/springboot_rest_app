@@ -1,11 +1,10 @@
 package com.epam.esm.certificate_service.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "gift_certificate")
-public class GiftCertificate {
+public class GiftCertificate extends RepresentationModel<GiftCertificate> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +41,9 @@ public class GiftCertificate {
             joinColumns = @JoinColumn(name = "gift_certificate_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> tags;
+
+    public GiftCertificate() {
+    }
 
     public long getId() {
         return id;

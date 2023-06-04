@@ -1,15 +1,15 @@
 package com.epam.esm.certificate_service.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class User extends RepresentationModel<User> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,12 +28,6 @@ public class User {
     private List<Order> orders;
 
     public User() {
-    }
-
-    public User(String firstName, String surname, String email) {
-        this.firstName = firstName;
-        this.surname = surname;
-        this.email = email;
     }
 
     public long getId() {

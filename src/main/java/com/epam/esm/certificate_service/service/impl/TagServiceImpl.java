@@ -3,6 +3,7 @@ package com.epam.esm.certificate_service.service.impl;
 import com.epam.esm.certificate_service.dao.TagRepository;
 import com.epam.esm.certificate_service.entities.Tag;
 import com.epam.esm.certificate_service.exeption_handling.exeptions.EmptyRequestBodyException;
+import com.epam.esm.certificate_service.exeption_handling.exeptions.InvalidRequestParamException;
 import com.epam.esm.certificate_service.exeption_handling.exeptions.NoSuchDataException;
 import com.epam.esm.certificate_service.service.TagService;
 import jakarta.persistence.NoResultException;
@@ -43,8 +44,16 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> getAllTags(int pageSize, int offset) {
-        return tagRepository.findAll(pageSize, offset);
+        if (pageSize > 0 && offset >= 0) {
+            return tagRepository.findAll(pageSize, offset);
+        } else {
+            throw new InvalidRequestParamException("Page number or size can't be 0 or negative", CODE);
+        }
     }
+
+//    private boolean checkParams(int pageSize, int offset) {
+//        return pageSize >= 0 && offset > 0;
+//    }
 
     @Override
     public void addTag(Tag tag) {
