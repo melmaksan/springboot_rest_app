@@ -7,12 +7,12 @@ import com.epam.esm.certificate_service.entities.User;
 import com.epam.esm.certificate_service.exeption_handling.exeptions.NoSuchDataException;
 import com.epam.esm.certificate_service.service.GiftCertificateService;
 import com.epam.esm.certificate_service.service.UserService;
+import jakarta.persistence.NoResultException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,24 +30,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
+        User user = userRepository.findById(id);
 
-        if (optionalUser.isEmpty()) {
+        if (user != null) {
+            return user;
+        } else {
             throw new NoSuchDataException("There is no user with id '" + id + "' in DB", CODE);
         }
-
-        return optionalUser.get();
     }
 
     @Override
     public User findByName(String userName) {
-        Optional<User> optionalUser = userRepository.findByFirstName(userName);
-
-        if (optionalUser.isEmpty()) {
+        try {
+            return userRepository.findByFirstName(userName);
+        } catch (NoResultException ex){
             throw new NoSuchDataException("There is no user with name '" + userName + "' in DB", CODE);
         }
-
-        return optionalUser.get();
     }
 
     @Override

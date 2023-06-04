@@ -5,6 +5,7 @@ import com.epam.esm.certificate_service.entities.Tag;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,19 +22,19 @@ public class TagRepoImpl implements TagRepository {
 
     @Override
     public Tag findByName(String paramName) throws NoResultException {
-        Query query = entityManager.createQuery("from Tag where name=:paramName");
+        TypedQuery<Tag> query = entityManager.createQuery("select t from Tag t where t.name = :paramName", Tag.class);
         query.setParameter("paramName", paramName);
-        return (Tag)(query.getSingleResult());
+        return query.getSingleResult();
     }
 
     @Override
     public Integer getWidelyUsedTag(long userId) {
         Query query = entityManager.createQuery
-                ("select tag.id from Tag as tag, Order as order \n" +
-                        "\t join tag.certificates as certificates \n" +
-                        "\t where order.certificate=certificates and order.user.id=:userId \n" +
-                        "\t GROUP BY  tag.id \n" +
-                        "\t order by count(tag.id) desc, sum(order.price) desc, tag.id");
+                ("select tag.id from Tag as tag, Order as order " +
+                        "join tag.certificates as certificates " +
+                        "where order.certificate=certificates and order.user.id = :userId " +
+                        "group by tag.id " +
+                        "order by count(tag.id) desc, sum(order.price) desc, tag.id");
         query.setParameter("userId", userId);
         query.setMaxResults(1);
         return (Integer) (query.getSingleResult());
@@ -46,7 +47,7 @@ public class TagRepoImpl implements TagRepository {
 
     @Override
     public List<Tag> findAll() {
-        return (List<Tag>) entityManager.createQuery("from Tag").getResultList();
+        return entityManager.createQuery("select t from Tag t", Tag.class).getResultList();
     }
 
     @Override

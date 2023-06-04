@@ -167,7 +167,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 Tag existTag = tagRepository.findByName(tag.getName());
                 giftCertificates.addAll(existTag.getCertificates());
             } catch (NoResultException ex) {
-                ex.printStackTrace();
+                throw new NoSuchDataException("There is no tag with name '" + tag.getName() + "' in DB", CODE);
             }
         }
         return giftCertificates.stream().distinct().collect(Collectors.toList());

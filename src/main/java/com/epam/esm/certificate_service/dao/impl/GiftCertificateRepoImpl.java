@@ -4,7 +4,7 @@ import com.epam.esm.certificate_service.dao.GiftCertificateRepository;
 import com.epam.esm.certificate_service.entities.GiftCertificate;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
-import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,14 +26,16 @@ public class GiftCertificateRepoImpl implements GiftCertificateRepository {
 
     @Override
     public GiftCertificate findByName(String paramName) throws NoResultException {
-        Query query = entityManager.createQuery("from GiftCertificate where name=:paramName");
+        TypedQuery<GiftCertificate> query = entityManager.createQuery
+                ("select g from GiftCertificate g where g.name = :paramName", GiftCertificate.class);
         query.setParameter("paramName", paramName);
-        return (GiftCertificate) query.getSingleResult();
+        return query.getSingleResult();
     }
 
     @Override
     public List<GiftCertificate> findAll() {
-        return (List<GiftCertificate>) entityManager.createQuery("from GiftCertificate").getResultList();
+        return entityManager.createQuery("select g from GiftCertificate g",
+                GiftCertificate.class).getResultList();
     }
 
     @Override
@@ -44,29 +46,35 @@ public class GiftCertificateRepoImpl implements GiftCertificateRepository {
 
     @Override
     public List<GiftCertificate> findByPart(String part) {
-        Query query = entityManager.createQuery("from GiftCertificate WHERE name LIKE :part OR description LIKE :part");
+        TypedQuery<GiftCertificate> query = entityManager.createQuery
+                ("select g from GiftCertificate g WHERE g.name LIKE :part OR g.description LIKE :part",
+                        GiftCertificate.class);
         query.setParameter("part", "%" + part + "%");
-        return (List<GiftCertificate>) query.getResultList();
+        return query.getResultList();
     }
 
     @Override
     public List<GiftCertificate> ascByDate() {
-        return (List<GiftCertificate>) entityManager.createQuery("from GiftCertificate ORDER BY createDate ASC").getResultList();
+        return entityManager.createQuery("select g from GiftCertificate g ORDER BY g.createDate ASC",
+                GiftCertificate.class).getResultList();
     }
 
     @Override
     public List<GiftCertificate> descByDate() {
-        return (List<GiftCertificate>) entityManager.createQuery("from GiftCertificate ORDER BY createDate DESC").getResultList();
+        return entityManager.createQuery("select g from GiftCertificate g ORDER BY g.createDate DESC",
+                GiftCertificate.class).getResultList();
     }
 
     @Override
     public List<GiftCertificate> ascByName() {
-        return (List<GiftCertificate>) entityManager.createQuery("from GiftCertificate ORDER BY name ASC").getResultList();
+        return entityManager.createQuery("select g from GiftCertificate g ORDER BY g.name ASC",
+                GiftCertificate.class).getResultList();
     }
 
     @Override
     public List<GiftCertificate> descByName() {
-        return (List<GiftCertificate>) entityManager.createQuery("from GiftCertificate ORDER BY name DESC").getResultList();
+        return entityManager.createQuery("select g from GiftCertificate g ORDER BY g.name DESC",
+                GiftCertificate.class).getResultList();
     }
 
     @Override
