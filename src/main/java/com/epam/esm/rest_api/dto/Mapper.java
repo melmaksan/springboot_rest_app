@@ -4,6 +4,9 @@ import com.epam.esm.certificate_service.entities.GiftCertificate;
 import com.epam.esm.certificate_service.entities.Order;
 import com.epam.esm.certificate_service.entities.Tag;
 import com.epam.esm.certificate_service.entities.User;
+import com.epam.esm.rest_api.controllers.TagController;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Links;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -11,6 +14,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class Mapper {
@@ -33,9 +39,8 @@ public class Mapper {
     }
 
     public TagDTO toTagDto(Tag tag) {
-        String name = tag.getName();
-
-        return new TagDTO(name);
+        return new TagDTO(tag.getName())
+                .add(linkTo(methodOn(TagController.class).showTag(tag.getId())).withSelfRel());
     }
 
     public UserDTO toUserDto(User user) {

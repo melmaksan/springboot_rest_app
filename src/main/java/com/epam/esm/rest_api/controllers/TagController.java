@@ -5,6 +5,7 @@ import com.epam.esm.certificate_service.service.TagService;
 import com.epam.esm.rest_api.dto.Mapper;
 import com.epam.esm.rest_api.dto.TagDTO;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,15 +38,17 @@ public class TagController {
     }
 
     @GetMapping(value = "/tags")
-    public List<TagDTO> showTags(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
-                                 @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
+    public CollectionModel<TagDTO> showTags(
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
         List<Tag> tagList = tagService.getAllTags(size, (page - 1) * size);
-//        tagList.forEach(tag -> tag.add(linkTo(TagController.class).slash(tag.getId()).withSelfRel()));
 
         List<TagDTO> dtoList = tagList.stream().map(mapper::toTagDto).collect(Collectors.toList());
-//        Link link = linkTo(TagController.class).slash("tags").withSelfRel();
+        Link link = linkTo(methodOn(TagController.class).showTags(page, size)).withSelfRel();
+        Link deleteTag = linkTo(methodOn(TagController.class).deleteTag(3)).withRel(IanaLinkRelations.parse("delete"));
+//        Link deleteTag = linkTo(methodOn(TagController.class).deleteTag(3)).withRel(("delete"));
 
-        return dtoList;
+        return CollectionModel.of(dtoList).add(link, deleteTag);
     }
 
     @DeleteMapping(value = "/tags/{id}")
@@ -57,7 +60,7 @@ public class TagController {
     @PostMapping(value = "/tags")
     public TagDTO createTag(@RequestBody Tag tag) {
         tagService.addTag(tag);
-        return mapper.toTagDto(tag);
+        return mapper.toTagDto(tagService.findByName(tag.getName()));
     }
 
 

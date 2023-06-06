@@ -1,8 +1,12 @@
 package com.epam.esm.rest_api.dto;
 
+import com.epam.esm.certificate_service.entities.Tag;
+import org.springframework.hateoas.Links;
+import org.springframework.hateoas.RepresentationModel;
+
 import java.util.Objects;
 
-public class TagDTO {
+public class TagDTO extends RepresentationModel<TagDTO> {
 
     private String name;
 
