@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "user")
-public class User extends RepresentationModel<User> {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

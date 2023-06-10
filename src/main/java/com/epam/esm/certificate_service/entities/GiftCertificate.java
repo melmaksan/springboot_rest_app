@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "gift_certificate")
-public class GiftCertificate extends RepresentationModel<GiftCertificate> {
+public class GiftCertificate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

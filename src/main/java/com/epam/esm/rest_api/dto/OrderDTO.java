@@ -1,10 +1,11 @@
 package com.epam.esm.rest_api.dto;
 
+import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class OrderDTO {
+public class OrderDTO extends RepresentationModel<OrderDTO> {
 
     private int price;
     private LocalDateTime time;

@@ -7,6 +7,7 @@ import com.epam.esm.rest_api.dto.TagDTO;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,17 +39,18 @@ public class TagController {
     }
 
     @GetMapping(value = "/tags")
-    public CollectionModel<TagDTO> showTags(
+    public ResponseEntity<CollectionModel<TagDTO>> showTags(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
         List<Tag> tagList = tagService.getAllTags(size, (page - 1) * size);
 
         List<TagDTO> dtoList = tagList.stream().map(mapper::toTagDto).collect(Collectors.toList());
         Link link = linkTo(methodOn(TagController.class).showTags(page, size)).withSelfRel();
-        Link deleteTag = linkTo(methodOn(TagController.class).deleteTag(3)).withRel(IanaLinkRelations.parse("delete"));
 //        Link deleteTag = linkTo(methodOn(TagController.class).deleteTag(3)).withRel(("delete"));
 
-        return CollectionModel.of(dtoList).add(link, deleteTag);
+        CollectionModel<TagDTO> model = CollectionModel.of(dtoList).add(link);
+
+        return ResponseEntity.ok(model);
     }
 
     @DeleteMapping(value = "/tags/{id}")

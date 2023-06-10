@@ -1,14 +1,16 @@
 package com.epam.esm.rest_api.dto;
 
+import com.epam.esm.certificate_service.entities.GiftCertificate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-public class CertificateDTO {
+public class CertificateDTO extends RepresentationModel<CertificateDTO> {
 
     private String name;
     private String description;

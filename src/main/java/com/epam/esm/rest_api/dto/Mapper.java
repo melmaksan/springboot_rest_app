@@ -4,7 +4,9 @@ import com.epam.esm.certificate_service.entities.GiftCertificate;
 import com.epam.esm.certificate_service.entities.Order;
 import com.epam.esm.certificate_service.entities.Tag;
 import com.epam.esm.certificate_service.entities.User;
+import com.epam.esm.rest_api.controllers.GiftCertificateController;
 import com.epam.esm.rest_api.controllers.TagController;
+import com.epam.esm.rest_api.controllers.UserController;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import org.springframework.stereotype.Component;
@@ -35,7 +37,9 @@ public class Mapper {
                     .collect(Collectors.toList());
         }
 
-        return new CertificateDTO(name, description, price, duration, createDate, tags);
+        return new CertificateDTO(name, description, price, duration, createDate, tags)
+                .add(linkTo(methodOn(GiftCertificateController.class)
+                        .getCertificateById(certificate.getId())).withSelfRel());
     }
 
     public TagDTO toTagDto(Tag tag) {
@@ -48,7 +52,8 @@ public class Mapper {
         String surname = user.getSurname();
         String email = user.getEmail();
 
-        return new UserDTO(name, surname, email);
+        return new UserDTO(name, surname, email)
+                .add(linkTo(methodOn(UserController.class).getUserById(user.getId())).withSelfRel());
     }
 
     public OrderDTO toOrderDto(Order order) {
