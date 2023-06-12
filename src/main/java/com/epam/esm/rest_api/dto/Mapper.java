@@ -1,14 +1,7 @@
 package com.epam.esm.rest_api.dto;
 
-import com.epam.esm.certificate_service.entities.GiftCertificate;
-import com.epam.esm.certificate_service.entities.Order;
-import com.epam.esm.certificate_service.entities.Tag;
-import com.epam.esm.certificate_service.entities.User;
-import com.epam.esm.rest_api.controllers.GiftCertificateController;
-import com.epam.esm.rest_api.controllers.TagController;
-import com.epam.esm.rest_api.controllers.UserController;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Links;
+import com.epam.esm.certificate_service.entities.*;
+import com.epam.esm.rest_api.controllers.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -31,20 +24,32 @@ public class Mapper {
         LocalDate createDate = certificate.getCreateDate().toLocalDate();
         List<String> tags = new ArrayList<>();
         if (certificate.getTags() != null) {
-            tags = certificate.getTags()
-                    .stream()
-                    .map(Tag::getName)
-                    .collect(Collectors.toList());
+            tags = certificate.getTags().stream().map(Tag::getName).collect(Collectors.toList());
         }
 
-        return new CertificateDTO(name, description, price, duration, createDate, tags)
-                .add(linkTo(methodOn(GiftCertificateController.class)
-                        .getCertificateById(certificate.getId())).withSelfRel());
+        CertificateDTO certificateDTO = new CertificateDTO(name, description, price, duration, createDate, tags);
+        try {
+            certificateDTO.add(linkTo(methodOn(GiftCertificateController.class)
+                    .getCertificateById(certificate.getId())).withSelfRel());
+            certificateDTO.add(linkTo(GiftCertificateController.class,
+                    GiftCertificateController.class.getMethod("deleteCertificate", long.class),
+                    certificate.getId()).withRel("delete"));
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e.getMessage(), e.getCause());
+        }
+        return certificateDTO;
     }
 
     public TagDTO toTagDto(Tag tag) {
-        return new TagDTO(tag.getName())
-                .add(linkTo(methodOn(TagController.class).showTag(tag.getId())).withSelfRel());
+        TagDTO tagDTO = new TagDTO(tag.getName());
+        try {
+            tagDTO.add(linkTo(methodOn(TagController.class).showTag(tag.getId())).withSelfRel());
+            tagDTO.add(linkTo(TagController.class,
+                    TagController.class.getMethod("deleteTag", int.class), tag.getId()).withRel("delete"));
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e.getMessage(), e.getCause());
+        }
+        return tagDTO;
     }
 
     public UserDTO toUserDto(User user) {

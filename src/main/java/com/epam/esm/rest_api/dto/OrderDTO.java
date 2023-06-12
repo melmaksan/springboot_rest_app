@@ -1,13 +1,17 @@
 package com.epam.esm.rest_api.dto;
 
-import org.springframework.hateoas.RepresentationModel;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class OrderDTO extends RepresentationModel<OrderDTO> {
+public class OrderDTO {
 
     private int price;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime time;
     private CertificateDTO certificate;
 

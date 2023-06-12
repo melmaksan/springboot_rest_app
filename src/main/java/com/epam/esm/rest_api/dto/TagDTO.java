@@ -26,13 +26,18 @@ public class TagDTO extends RepresentationModel<TagDTO> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
         TagDTO tagDTO = (TagDTO) o;
+
         return Objects.equals(name, tagDTO.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        int result = super.hashCode();
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
     }
 
     @Override
