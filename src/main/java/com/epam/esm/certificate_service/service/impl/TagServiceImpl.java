@@ -51,10 +51,6 @@ public class TagServiceImpl implements TagService {
         }
     }
 
-//    private boolean checkParams(int pageSize, int offset) {
-//        return pageSize >= 0 && offset > 0;
-//    }
-
     @Override
     public void addTag(Tag tag) {
         if (tag.getName() == null) {

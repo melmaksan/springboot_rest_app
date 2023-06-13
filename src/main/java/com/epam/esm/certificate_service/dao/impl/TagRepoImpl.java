@@ -32,7 +32,7 @@ public class TagRepoImpl implements TagRepository {
         TypedQuery<Integer> query = entityManager.createQuery
                 ("select tag.id from Tag as tag, Order as order " +
                         "join tag.certificates as certificates " +
-                        "where order.certificate=certificates and order.user.id = :userId " +
+                        "where order.certificate = certificates and order.user.id = :userId " +
                         "group by tag.id " +
                         "order by count(tag.id) desc, sum(order.price) desc, tag.id", Integer.class);
         query.setParameter("userId", userId);
