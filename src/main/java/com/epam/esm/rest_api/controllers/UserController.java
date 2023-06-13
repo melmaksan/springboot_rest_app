@@ -2,7 +2,6 @@ package com.epam.esm.rest_api.controllers;
 
 import com.epam.esm.certificate_service.entities.GiftCertificate;
 import com.epam.esm.certificate_service.entities.Order;
-import com.epam.esm.certificate_service.entities.Tag;
 import com.epam.esm.certificate_service.entities.User;
 import com.epam.esm.certificate_service.service.TagService;
 import com.epam.esm.certificate_service.service.UserService;
@@ -11,7 +10,6 @@ import com.epam.esm.rest_api.dto.OrderDTO;
 import com.epam.esm.rest_api.dto.TagDTO;
 import com.epam.esm.rest_api.dto.UserDTO;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.web.bind.annotation.*;
@@ -42,18 +40,8 @@ public class UserController {
     }
 
     @GetMapping(value = "/findByName/{name}")
-    public EntityModel<UserDTO> getUserByName(@PathVariable String name) {
-        UserDTO userDTO = mapper.toUserDto(userService.findByName(name));
-        Link link;
-        try {
-            link = linkTo(UserController.class,
-                    UserController.class.getMethod("getUserByName", String.class), name)
-                    .withRel("get user with '" + name + "' name");
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e.getMessage(), e.getCause());
-        }
-
-        return EntityModel.of(userDTO).add(link);
+    public UserDTO getUserByName(@PathVariable String name) {
+        return mapper.toUserDto(userService.findByName(name));
     }
 
     @GetMapping
@@ -86,17 +74,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}/mostUsedTag")
-    public EntityModel<TagDTO> getWidelyUsedTag(@PathVariable long id) {
-        TagDTO dto = mapper.toTagDto(tagService.getWidelyUsedTag(id));
-        Link link;
-        try {
-            link = linkTo(UserController.class,
-                    UserController.class.getMethod("getWidelyUsedTag", long.class), id)
-                    .withRel("show most user used tag with id " + id);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e.getMessage(), e.getCause());
-        }
-
-        return EntityModel.of(dto).add(link);
+    public TagDTO getWidelyUsedTag(@PathVariable long id) {
+        return mapper.toTagDto(tagService.getWidelyUsedTag(id));
     }
 }

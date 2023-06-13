@@ -5,7 +5,6 @@ import com.epam.esm.certificate_service.service.TagService;
 import com.epam.esm.rest_api.dto.Mapper;
 import com.epam.esm.rest_api.dto.TagDTO;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.web.bind.annotation.*;
@@ -34,27 +33,17 @@ public class TagController {
     }
 
     @GetMapping(value = "/findByName/{name}")
-    public EntityModel<TagDTO> getGiftCertificatesByName(@PathVariable String name) {
-        TagDTO tagDTO = mapper.toTagDto(tagService.findByName(name));
-        Link link;
-        try {
-            link = linkTo(TagController.class,
-                    TagController.class.getMethod("getGiftCertificatesByName", String.class), name)
-                    .withRel("get tag with '" + name + "' name");
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e.getMessage(), e.getCause());
-        }
-
-        return EntityModel.of(tagDTO).add(link);
+    public TagDTO getGiftCertificatesByName(@PathVariable String name) {
+        return mapper.toTagDto(tagService.findByName(name));
     }
 
     @GetMapping
     public CollectionModel<TagDTO> showTags(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
-        List<Tag> tagList = tagService.getAllTags(size, (page - 1) * size);
+        List<TagDTO> dtoList = tagService.getAllTags(size, (page - 1) * size)
+                .stream().map(mapper::toTagDto).collect(Collectors.toList());
 
-        List<TagDTO> dtoList = tagList.stream().map(mapper::toTagDto).collect(Collectors.toList());
         Link link = linkTo(methodOn(TagController.class).showTags(page, size)).withSelfRel();
 
         return CollectionModel.of(dtoList).add(link);

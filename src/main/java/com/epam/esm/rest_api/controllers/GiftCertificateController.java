@@ -7,7 +7,6 @@ import com.epam.esm.certificate_service.service.TagService;
 import com.epam.esm.rest_api.dto.CertificateDTO;
 import com.epam.esm.rest_api.dto.Mapper;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.web.bind.annotation.*;
@@ -38,18 +37,8 @@ public class GiftCertificateController {
     }
 
     @GetMapping(value = "/findByName/{name}")
-    public EntityModel<CertificateDTO> getGiftCertificateByName(@PathVariable String name) {
-        CertificateDTO certificateDTO = mapper.toCertificateDto(giftCertificateService.getGiftCertificateByName(name));
-        Link link;
-        try {
-            link = linkTo(GiftCertificateController.class,
-                    GiftCertificateController.class.getMethod("getGiftCertificateByName", String.class), name)
-                    .withRel("get user with '" + name + "' name");
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e.getMessage(), e.getCause());
-        }
-
-        return EntityModel.of(certificateDTO).add(link);
+    public CertificateDTO getGiftCertificateByName(@PathVariable String name) {
+        return mapper.toCertificateDto(giftCertificateService.getGiftCertificateByName(name));
     }
 
     @GetMapping(value = "/findByPart/{part}")

@@ -1,7 +1,6 @@
 package com.epam.esm.rest_api.dto;
 
 import com.epam.esm.certificate_service.entities.*;
-import com.epam.esm.rest_api.controllers.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -10,8 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static com.epam.esm.rest_api.dto.LinkAssembler.*;
 
 @Component
 public class Mapper {
@@ -28,37 +26,31 @@ public class Mapper {
         }
 
         CertificateDTO certificateDTO = new CertificateDTO(name, description, price, duration, createDate, tags);
-        try {
-            certificateDTO.add(linkTo(methodOn(GiftCertificateController.class)
-                    .getCertificateById(certificate.getId())).withSelfRel());
-            certificateDTO.add(linkTo(GiftCertificateController.class,
-                    GiftCertificateController.class.getMethod("deleteCertificate", long.class),
-                    certificate.getId()).withRel("delete"));
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e.getMessage(), e.getCause());
-        }
+        addLinksToCertificateDTO(certificate, certificateDTO);
+
         return certificateDTO;
     }
 
+
+
     public TagDTO toTagDto(Tag tag) {
         TagDTO tagDTO = new TagDTO(tag.getName());
-        try {
-            tagDTO.add(linkTo(methodOn(TagController.class).showTag(tag.getId())).withSelfRel());
-            tagDTO.add(linkTo(TagController.class,
-                    TagController.class.getMethod("deleteTag", int.class), tag.getId()).withRel("delete"));
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e.getMessage(), e.getCause());
-        }
+        addLinksToTagDTO(tag, tagDTO);
+
         return tagDTO;
     }
+
+
 
     public UserDTO toUserDto(User user) {
         String name = user.getFirstName();
         String surname = user.getSurname();
         String email = user.getEmail();
 
-        return new UserDTO(name, surname, email)
-                .add(linkTo(methodOn(UserController.class).getUserById(user.getId())).withSelfRel());
+        UserDTO userDTO = new UserDTO(name, surname, email);
+        addLinksToUserDTO(user, userDTO);
+
+        return userDTO;
     }
 
     public OrderDTO toOrderDto(Order order) {
