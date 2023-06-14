@@ -43,7 +43,7 @@ class UserRepoImplTest {
 
     @Test
     void save() {
-        User user = new User("test", "test", "test@org.com");
+        User user = new User("test", "testing", "test@org.com");
         userRepo.save(user);
 
         List<User> userList = userRepo.findAll(5, 0);
