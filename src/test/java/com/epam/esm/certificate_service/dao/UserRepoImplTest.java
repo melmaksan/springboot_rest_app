@@ -37,7 +37,7 @@ class UserRepoImplTest {
     void findAll() {
         List<User> userList = userRepo.findAll(5, 0);
 
-        assertNotNull(userList);
+        assertNotEquals(true, userList.isEmpty());
         assertEquals(2, userList.size(), "should be 2 users in the list");
     }
 
@@ -48,6 +48,7 @@ class UserRepoImplTest {
 
         List<User> userList = userRepo.findAll(5, 0);
 
+        assertNotEquals(true, userList.isEmpty());
         assertEquals(3, userList.size(), "should be 3 users in the list");
     }
 }

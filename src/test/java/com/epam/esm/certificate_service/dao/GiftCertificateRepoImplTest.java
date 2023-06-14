@@ -16,6 +16,7 @@ class GiftCertificateRepoImplTest {
 
     @Autowired
     GiftCertificateRepository giftCertificateRepo;
+
     private static GiftCertificate certificate;
 
     @BeforeAll

@@ -44,7 +44,7 @@ class TagRepoImplTest {
     void findAll() {
         List<Tag> tagList = tagRepo.findAll(5, 0);
 
-        assertNotNull(tagList);
+        assertNotEquals(true, tagList.isEmpty());
         assertEquals(3, tagList.size(), "should be 3 tags in the list");
     }
 
@@ -55,6 +55,7 @@ class TagRepoImplTest {
 
         List<Tag> tagList = tagRepo.findAll(5, 0);
 
+        assertNotEquals(true, tagList.isEmpty());
         assertEquals(4, tagList.size(), "there are 4 tags after insert");
     }
 
@@ -64,6 +65,7 @@ class TagRepoImplTest {
 
         List<Tag> tagList = tagRepo.findAll(5, 0);
 
-        assertEquals(3, tagList.size(), "there are 3 tag after delete");
+        assertNotEquals(true, tagList.isEmpty());
+        assertEquals(4, tagList.size(), "there are 4 tag after delete");
     }
 }

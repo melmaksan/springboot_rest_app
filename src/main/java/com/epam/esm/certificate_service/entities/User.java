@@ -23,7 +23,8 @@ public class User {
     private String email;
 
     @OneToMany(cascade = CascadeType.ALL,
-            mappedBy = "user")
+            mappedBy = "user",
+            fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Order> orders;
 

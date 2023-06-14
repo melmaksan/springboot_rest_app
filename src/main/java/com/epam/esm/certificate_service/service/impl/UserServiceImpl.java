@@ -70,6 +70,7 @@ public class UserServiceImpl implements UserService {
         orders.add(order);
 
         user.setOrders(orders);
+
         userRepository.save(user);
     }
 }
