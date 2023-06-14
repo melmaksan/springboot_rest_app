@@ -50,7 +50,7 @@ class UserServiceImplTest {
     @Test
     void getAllUsers() {
         List<User> tags = getUserList();
-        List<User> foundList = userService.getAllUsers(5, 0);
+        List<User> foundList = userService.getAllUsers(2, 0);
 
         assertNotEquals(true, foundList.isEmpty());
         assertEquals(tags, foundList);

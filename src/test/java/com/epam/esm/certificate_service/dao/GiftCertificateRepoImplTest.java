@@ -23,12 +23,12 @@ class GiftCertificateRepoImplTest {
     static void setUp() {
         certificate = new GiftCertificate();
 
-        certificate.setName("test");
-        certificate.setDescription("test");
+        certificate.setName("Name");
+        certificate.setDescription("Test");
         certificate.setPrice(77);
         certificate.setDuration(13);
-        certificate.setCreateDate(LocalDateTime.now());
-        certificate.setLastUpdateDate(LocalDateTime.now());
+        certificate.setCreateDate(LocalDateTime.of(2023, 6, 14, 12, 0, 4));
+        certificate.setLastUpdateDate(LocalDateTime.of(2023, 6, 14, 12, 0, 4));
     }
 
     @Test
@@ -75,7 +75,7 @@ class GiftCertificateRepoImplTest {
         GiftCertificate updatedCertificate = giftCertificateRepo.findById(id);
 
         assertNotNull(updatedCertificate);
-        assertEquals("test", updatedCertificate.getName());
+        assertEquals("Name", updatedCertificate.getName());
         assertEquals("update", updatedCertificate.getDescription());
         assertEquals(77, updatedCertificate.getPrice());
         assertEquals(130, updatedCertificate.getDuration());

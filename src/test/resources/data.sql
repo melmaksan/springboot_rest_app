@@ -1,8 +1,8 @@
-INSERT into "gift_certificate" ("name", "description", "price", "duration", "create_date") VALUES ('Promo_1000', 'gift certificate gives a discount of 1000₴ for 30 days', 1000, 30, '2023-06-14 12:00:00');
-INSERT into "gift_certificate" ("name", "description", "price", "duration", "create_date") VALUES ('Promo_100', 'gift certificate gives a discount of 100₴ for 30 days', 100, 30, '2023-06-14 12:00:01');
-INSERT into "gift_certificate" ("name", "description", "price", "duration", "create_date") VALUES ('Promo_500', 'gift certificate gives a discount of 500₴ for 30 days', 500, 30, '2023-06-14 12:00:02');
-INSERT into "gift_certificate" ("name", "description", "price", "duration", "create_date") VALUES ('MELMAN1500', 'promo code gives a discount of 1500₴ during the next year', 1500, 365, '2023-06-14 12:00:03');
-INSERT into "gift_certificate" ("name", "description", "price", "duration", "create_date") VALUES ('MELMAN50', 'promo code gives a discount of 50₴ during the next week', 50, 7, '2023-06-14 12:00:04');
+INSERT into "gift_certificate" ("name", "description", "price", "duration", "create_date") VALUES ('Promo_1000', 'gift certificate gives a discount of 1000UAH for 30 days', 1000, 30, '2023-06-14 12:00:00');
+INSERT into "gift_certificate" ("name", "description", "price", "duration", "create_date") VALUES ('Promo_100', 'gift certificate gives a discount of 100UAH for 30 days', 100, 30, '2023-06-14 12:00:01');
+INSERT into "gift_certificate" ("name", "description", "price", "duration", "create_date") VALUES ('Promo_500', 'gift certificate gives a discount of 500UAH for 30 days', 500, 30, '2023-06-14 12:00:02');
+INSERT into "gift_certificate" ("name", "description", "price", "duration", "create_date") VALUES ('MELMAN1500', 'promo code gives a discount of 1500UAH during the next year', 1500, 365, '2023-06-14 12:00:03');
+INSERT into "gift_certificate" ("name", "description", "price", "duration", "create_date") VALUES ('MELMAN50', 'promo code gives a discount of 50UAH during the next week', 50, 7, '2023-06-14 12:00:06');
 
 INSERT into "tag" ("name") VALUES ('discount');
 INSERT into "tag" ("name") VALUES ('gift');

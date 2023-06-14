@@ -52,7 +52,7 @@ class TagServiceImplTest {
     @Test
     void getAllTags() {
         List<Tag> tags = getTagList();
-        List<Tag> foundList = tagService.getAllTags(5, 0);
+        List<Tag> foundList = tagService.getAllTags(3, 0);
 
         assertNotEquals(true, foundList.isEmpty());
         assertEquals(tags, foundList);
@@ -81,10 +81,10 @@ class TagServiceImplTest {
     void deleteTag() {
         tagService.deleteTag(4);
 
-        List<Tag> tagList = tagService.getAllTags(5, 0);
+        List<Tag> tagList = tagService.getAllTags(3, 0);
 
         assertNotEquals(true, tagList.isEmpty());
-        assertEquals(tagList.size(), 3);
+        assertEquals(3, tagList.size());
     }
 
     @Test

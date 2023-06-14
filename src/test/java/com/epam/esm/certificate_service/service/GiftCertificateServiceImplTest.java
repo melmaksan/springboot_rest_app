@@ -26,7 +26,7 @@ class GiftCertificateServiceImplTest {
 
         certificate1.setId(1L);
         certificate1.setName("Promo_1000");
-        certificate1.setDescription("gift certificate gives a discount of 1000₴ for 30 days");
+        certificate1.setDescription("gift certificate gives a discount of 1000UAH for 30 days");
         certificate1.setPrice(1000);
         certificate1.setDuration(30);
         certificate1.setCreateDate(LocalDateTime.of(2023, 6, 14, 12, 0));
@@ -63,7 +63,7 @@ class GiftCertificateServiceImplTest {
 
     private GiftCertificate getTestCertificate() {
         GiftCertificate giftCertificate = new GiftCertificate();
-        giftCertificate.setName("test");
+        giftCertificate.setName("test_certificate");
         giftCertificate.setDescription("testing");
         giftCertificate.setPrice(100);
         giftCertificate.setDuration(10);
@@ -91,7 +91,7 @@ class GiftCertificateServiceImplTest {
     void deleteGiftCertificate() {
         certificateService.deleteGiftCertificate(5);
 
-        List<GiftCertificate> certificates = certificateService.getAllGiftCertificates(10, 0);
+        List<GiftCertificate> certificates = certificateService.getAllGiftCertificates(6, 0);
 
         assertNotEquals(true, certificates.isEmpty());
         assertEquals(6, certificates.size());
@@ -143,10 +143,10 @@ class GiftCertificateServiceImplTest {
 
     @Test
     void sortGiftCertificatesByNameDesc() {
-        List<GiftCertificate> certificates = certificateService.sortGiftCertificatesByNameDesc(4, 1);
+        List<GiftCertificate> certificates = certificateService.sortGiftCertificatesByNameDesc(4, 0);
 
         assertNotEquals(true, certificates.isEmpty());
-        assertEquals("Promo_1000", certificates.get(0).getName());
+        assertEquals("Promo_500", certificates.get(0).getName());
         assertEquals(4, certificates.size(), "should be 4 certificates");
     }
 
