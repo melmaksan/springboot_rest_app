@@ -10,6 +10,9 @@ import com.epam.esm.certificate_service.service.GiftCertificateService;
 import com.epam.esm.certificate_service.service.UserService;
 import jakarta.persistence.NoResultException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional(isolation=Isolation.REPEATABLE_READ)
     public User findById(long id) {
         User user = userRepository.findById(id);
 
@@ -41,6 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(isolation=Isolation.REPEATABLE_READ)
     public User findByName(String userName) {
         try {
             return userRepository.findByFirstName(userName);
@@ -50,6 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(isolation=Isolation.REPEATABLE_READ)
     public List<User> getAllUsers(int pageSize, int offset) {
         if (pageSize > 0 && offset >= 0) {
             return userRepository.findAll(pageSize, offset);
@@ -59,6 +65,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(isolation=Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
     public void buyCertificate(User user, String certificateName) {
         GiftCertificate certificate = certificateService.getGiftCertificateByName(certificateName);
 
@@ -72,5 +79,11 @@ public class UserServiceImpl implements UserService {
         user.setOrders(orders);
 
         userRepository.save(user);
+    }
+
+    @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public int getNumberOfRows() {
+        return Math.toIntExact(userRepository.getNumberOfRows());
     }
 }

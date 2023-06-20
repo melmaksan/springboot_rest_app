@@ -15,6 +15,7 @@ import static com.epam.esm.rest_api.dto.LinkAssembler.*;
 public class Mapper {
 
     public CertificateDTO toCertificateDto(GiftCertificate certificate) {
+        long id = certificate.getId();
         String name = certificate.getName();
         String description = certificate.getDescription();
         int price = certificate.getPrice();
@@ -25,39 +26,37 @@ public class Mapper {
             tags = certificate.getTags().stream().map(Tag::getName).collect(Collectors.toList());
         }
 
-        CertificateDTO certificateDTO = new CertificateDTO(name, description, price, duration, createDate, tags);
+        CertificateDTO certificateDTO = new CertificateDTO(id, name, description, price, duration, createDate, tags);
         addLinksToCertificateDTO(certificate, certificateDTO);
 
         return certificateDTO;
     }
 
-
-
     public TagDTO toTagDto(Tag tag) {
-        TagDTO tagDTO = new TagDTO(tag.getName());
+        TagDTO tagDTO = new TagDTO(tag.getId(), tag.getName());
         addLinksToTagDTO(tag, tagDTO);
 
         return tagDTO;
     }
 
-
-
     public UserDTO toUserDto(User user) {
+        long id = user.getId();
         String name = user.getFirstName();
         String surname = user.getSurname();
         String email = user.getEmail();
 
-        UserDTO userDTO = new UserDTO(name, surname, email);
+        UserDTO userDTO = new UserDTO(id, name, surname, email);
         addLinksToUserDTO(user, userDTO);
 
         return userDTO;
     }
 
     public OrderDTO toOrderDto(Order order) {
+        long id = order.getId();
         int price = order.getPrice();
         LocalDateTime dateTime = order.getTime();
         CertificateDTO certificateDTO = toCertificateDto(order.getCertificate());
 
-        return new OrderDTO(price, dateTime, certificateDTO);
+        return new OrderDTO(id, price, dateTime, certificateDTO);
     }
 }

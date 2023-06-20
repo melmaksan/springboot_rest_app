@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.epam.esm.rest_api.Constants.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -45,15 +46,11 @@ public class UserController {
     }
 
     @GetMapping
-    public CollectionModel<UserDTO> getAllUsers(
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
-        List<User> users = userService.getAllUsers(size, (page - 1) * size);
-
-        List<UserDTO> dtoList = users.stream().map(mapper::toUserDto).collect(Collectors.toList());
-        Link link = linkTo(methodOn(UserController.class).getAllUsers(page, size)).withSelfRel();
-
-        return CollectionModel.of(dtoList).add(link);
+    public List<UserDTO> getAllUsers(
+            @RequestParam(value = PAGE, required = false, defaultValue = DEFAULT_USER_PAGE_NUMBER) int page,
+            @RequestParam(value = SIZE, required = false, defaultValue = DEFAULT_USER_PAGE_SIZE) int size) {
+        return userService.getAllUsers(size, (page - 1) * size)
+                .stream().map(mapper::toUserDto).collect(Collectors.toList());
     }
 
     @GetMapping(value = "/{id}/orders")

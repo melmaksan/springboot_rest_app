@@ -10,6 +10,9 @@ import com.epam.esm.certificate_service.exeption_handling.exeptions.NoSuchDataEx
 import com.epam.esm.certificate_service.service.GiftCertificateService;
 import jakarta.persistence.NoResultException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public GiftCertificate getGiftCertificateById(long id) {
         GiftCertificate certificate = certificateRepository.findById(id);
 
@@ -41,16 +45,19 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public GiftCertificate getGiftCertificateByName(String name) {
         try {
             return certificateRepository.findByName(name);
-        } catch (NoResultException ex){
+        } catch (NoResultException ex) {
             throw new NoSuchDataException("There is no certificate with name '" + name + "' in DB", CODE);
         }
     }
 
 
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW,
+            rollbackFor = EmptyRequestBodyException.class)
     public void addGiftCertificate(GiftCertificate giftCertificate) {
         giftCertificate.setCreateDate(LocalDateTime.now());
         giftCertificate.setLastUpdateDate(LocalDateTime.now());
@@ -69,6 +76,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = NoSuchDataException.class)
     public void updateGiftCertificate(GiftCertificate updateCertificate) {
         GiftCertificate certificate = certificateRepository.findById(updateCertificate.getId());
 
@@ -119,6 +127,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = NoSuchDataException.class)
     public void deleteGiftCertificate(long id) {
         GiftCertificate certificate = certificateRepository.findById(id);
 
@@ -131,6 +140,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public List<GiftCertificate> getAllGiftCertificates(int pageSize, int offset) {
         if (pageSize > 0 && offset >= 0) {
             return certificateRepository.findAll(pageSize, offset);
@@ -140,11 +150,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public List<GiftCertificate> getGiftCertificatesByPart(String part) {
         return certificateRepository.findByPart(part);
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public List<GiftCertificate> sortGiftCertificatesByDateAsc(int pageSize, int offset) {
         if (pageSize > 0 && offset >= 0) {
             return certificateRepository.ascByDate(pageSize, offset);
@@ -154,6 +166,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public List<GiftCertificate> sortGiftCertificatesByDateDesc(int pageSize, int offset) {
         if (pageSize > 0 && offset >= 0) {
             return certificateRepository.descByDate(pageSize, offset);
@@ -163,6 +176,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public List<GiftCertificate> sortGiftCertificatesByNameAsc(int pageSize, int offset) {
         if (pageSize > 0 && offset >= 0) {
             return certificateRepository.ascByName(pageSize, offset);
@@ -172,6 +186,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public List<GiftCertificate> sortGiftCertificatesByNameDesc(int pageSize, int offset) {
         if (pageSize > 0 && offset >= 0) {
             return certificateRepository.descByName(pageSize, offset);
@@ -181,6 +196,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public List<GiftCertificate> getCertificatesByTags(Tag[] tags) {
         List<GiftCertificate> giftCertificates = new ArrayList<>();
         for (Tag tag : tags) {
@@ -192,6 +208,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             }
         }
         return giftCertificates.stream().distinct().collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public int getNumberOfRows() {
+        return Math.toIntExact(certificateRepository.getNumberOfRows());
     }
 
 }

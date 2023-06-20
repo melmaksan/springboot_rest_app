@@ -30,4 +30,6 @@ public interface GiftCertificateService {
     List<GiftCertificate> sortGiftCertificatesByNameDesc(int pageSize, int offset);
 
     List<GiftCertificate> getCertificatesByTags(Tag[] tags);
+
+    int getNumberOfRows();
 }

@@ -4,10 +4,8 @@ import com.epam.esm.certificate_service.dao.TagRepository;
 import com.epam.esm.certificate_service.entities.Tag;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
-import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -54,15 +52,18 @@ public class TagRepoImpl implements TagRepository {
     }
 
     @Override
-    @Transactional
     public void save(Tag tag) {
         entityManager.merge(tag);
     }
 
     @Override
-    @Transactional
     public void deleteById(int id) {
         Tag tag = entityManager.find(Tag.class, id);
         entityManager.remove(tag);
+    }
+
+    @Override
+    public Long getNumberOfRows() {
+        return entityManager.createQuery("select count(t) from Tag t", Long.class).getSingleResult();
     }
 }

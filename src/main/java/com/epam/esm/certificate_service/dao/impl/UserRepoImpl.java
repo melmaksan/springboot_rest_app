@@ -6,7 +6,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -40,8 +39,12 @@ public class UserRepoImpl implements UserRepository {
     }
 
     @Override
-    @Transactional
     public void save(User user) {
         entityManager.merge(user);
+    }
+
+    @Override
+    public Long getNumberOfRows() {
+        return entityManager.createQuery("select count(u) from User u", Long.class).getSingleResult();
     }
 }
