@@ -4,6 +4,7 @@ import com.epam.esm.certificate_service.entities.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -42,6 +43,7 @@ class UserRepoImplTest {
     }
 
     @Test
+    @Transactional
     void save() {
         User user = new User("test", "testing", "test@org.com");
         userRepo.save(user);

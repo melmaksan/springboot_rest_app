@@ -4,6 +4,7 @@ import com.epam.esm.certificate_service.entities.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ class TagRepoImplTest {
     }
 
     @Test
+    @Transactional
     void save() {
         Tag tag = new Tag("test_tag");
         tagRepo.save(tag);
@@ -60,12 +62,13 @@ class TagRepoImplTest {
     }
 
     @Test
+    @Transactional
     void deleteById() {
         tagRepo.deleteById(2);
 
         List<Tag> tagList = tagRepo.findAll(5, 0);
 
         assertNotEquals(true, tagList.isEmpty());
-        assertEquals(4, tagList.size(), "there are 4 tag after delete");
+        assertEquals(3, tagList.size(), "there are 4 tag after delete");
     }
 }

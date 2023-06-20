@@ -79,7 +79,7 @@ class TagServiceImplTest {
 
     @Test
     void deleteTag() {
-        tagService.deleteTag(4);
+        tagService.deleteTag(3);
 
         List<Tag> tagList = tagService.getAllTags(3, 0);
 

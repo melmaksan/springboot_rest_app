@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -73,13 +74,17 @@ class GiftCertificateServiceImplTest {
 
     @Test
     void updateGiftCertificate() {
-        GiftCertificate certificate3 = getTestCertificate();
-        certificate3.setId(6);
+        GiftCertificate certificate3 = certificateService.getGiftCertificateById(certificate1.getId());
+
+        assertEquals(30, certificate3.getDuration());
+        assertEquals("gift certificate gives a discount of 1000UAH for 30 days", certificate3.getDescription());
+
         certificate3.setDescription("update");
         certificate3.setDuration(777);
+        certificate3.setTags(new ArrayList<>());
 
         certificateService.updateGiftCertificate(certificate3);
-        GiftCertificate expectedCertificate = certificateService.getGiftCertificateById(6);
+        GiftCertificate expectedCertificate = certificateService.getGiftCertificateById(certificate3.getId());
 
         assertNotNull(expectedCertificate);
         assertEquals(777, expectedCertificate.getDuration());
