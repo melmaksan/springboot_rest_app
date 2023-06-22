@@ -56,7 +56,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE)
     public void addTag(Tag tag) {
         if (tag.getName() == null) {
             throw new EmptyRequestBodyException("Field name is required, please try again!", CODE);
@@ -65,7 +65,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE)
     public void deleteTag(int id) {
         Tag tag = tagRepository.findById(id);
 

@@ -54,7 +54,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
 
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE)
     public void addGiftCertificate(GiftCertificate giftCertificate) {
         giftCertificate.setCreateDate(LocalDateTime.now());
         giftCertificate.setLastUpdateDate(LocalDateTime.now());
@@ -73,7 +73,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE)
     public void updateGiftCertificate(GiftCertificate updateCertificate) {
         GiftCertificate certificate = certificateRepository.findById(updateCertificate.getId());
 
@@ -124,7 +124,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE)
     public void deleteGiftCertificate(long id) {
         GiftCertificate certificate = certificateRepository.findById(id);
 

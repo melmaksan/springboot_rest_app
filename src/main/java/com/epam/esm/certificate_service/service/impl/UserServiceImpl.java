@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(isolation=Isolation.SERIALIZABLE)
+    @Transactional(readOnly = false, isolation=Isolation.SERIALIZABLE)
     public void buyCertificate(User user, String certificateName) {
         GiftCertificate certificate = certificateService.getGiftCertificateByName(certificateName);
 
