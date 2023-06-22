@@ -15,6 +15,7 @@ public class Constants {
     public static final String SHOW_BY_ID = "show_by_id";
     public static final String SHOW_BY_NAME = "show_by_name";
     public static final String DELETE = "delete";
-    public static final String SHOW_ALL = "show_all";
+    public static final String FIRST_PAGE = "first_page";
+    public static final String LAST_PAGE = "last_page";
 
 }

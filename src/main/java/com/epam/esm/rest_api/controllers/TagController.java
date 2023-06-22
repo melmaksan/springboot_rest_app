@@ -25,17 +25,17 @@ public class TagController {
     }
 
     @GetMapping(value = "/{id}")
-    public TagDTO showTag(@PathVariable int id) {
+    public TagDTO getTagById(@PathVariable int id) {
         return mapper.toTagDto(tagService.findById(id));
     }
 
     @GetMapping(value = "/findByName/{name}")
-    public TagDTO getGiftCertificatesByName(@PathVariable String name) {
+    public TagDTO getTagByName(@PathVariable String name) {
         return mapper.toTagDto(tagService.findByName(name));
     }
 
     @GetMapping
-    public List<TagDTO> showTags(
+    public List<TagDTO> getAllTags(
             @RequestParam(value = PAGE, required = false, defaultValue = DEFAULT_TAG_PAGE_NUMBER) int page,
             @RequestParam(value = SIZE, required = false, defaultValue = DEFAULT_TAG_PAGE_SIZE) int size) {
         return tagService.getAllTags(size, (page - 1) * size)

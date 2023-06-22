@@ -38,7 +38,7 @@ public class GiftCertificateController {
     }
 
     @GetMapping(value = "/findByName/{name}")
-    public CertificateDTO getGiftCertificateByName(@PathVariable String name) {
+    public CertificateDTO getCertificateByName(@PathVariable String name) {
         return mapper.toCertificateDto(giftCertificateService.getGiftCertificateByName(name));
     }
 

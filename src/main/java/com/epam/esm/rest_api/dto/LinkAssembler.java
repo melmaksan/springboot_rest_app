@@ -36,14 +36,17 @@ public class LinkAssembler {
                     GiftCertificateController.class.getMethod("getCertificateById", long.class),
                     certificate.getId()).withRel(SHOW_BY_ID));
             certificateDTO.add(linkTo(GiftCertificateController.class,
-                    GiftCertificateController.class.getMethod("getGiftCertificateByName", String.class),
+                    GiftCertificateController.class.getMethod("getCertificateByName", String.class),
                     certificate.getName()).withRel(SHOW_BY_NAME));
             certificateDTO.add(linkTo(GiftCertificateController.class,
                     GiftCertificateController.class.getMethod("deleteCertificate", long.class),
                     certificate.getId()).withRel(DELETE));
             certificateDTO.add(linkTo(GiftCertificateController.class,
                     GiftCertificateController.class.getMethod("getAllCertificates", int.class, int.class),
-                    getLastPage(rows, size), size).withRel(SHOW_ALL + "_certificates"));
+                    Integer.parseInt(DEFAULT_TAG_PAGE_NUMBER), size).withRel(FIRST_PAGE));
+            certificateDTO.add(linkTo(GiftCertificateController.class,
+                    GiftCertificateController.class.getMethod("getAllCertificates", int.class, int.class),
+                    getLastPage(rows, size), size).withRel(LAST_PAGE));
         } catch (NoSuchMethodException e) {
             throw new MethodDoesNotExistException(e.getMessage(), CODE);
         }
@@ -53,14 +56,16 @@ public class LinkAssembler {
         int rows = tagService.getNumberOfRows();
         int size = Integer.parseInt(DEFAULT_TAG_PAGE_SIZE);
         try {
-            tagDTO.add(linkTo(TagController.class, TagController.class.getMethod("showTag", int.class),
+            tagDTO.add(linkTo(TagController.class, TagController.class.getMethod("getTagById", int.class),
                     tag.getId()).withRel(SHOW_BY_ID));
-            tagDTO.add(linkTo(TagController.class, TagController.class.getMethod("getGiftCertificatesByName",
+            tagDTO.add(linkTo(TagController.class, TagController.class.getMethod("getTagByName",
                     String.class), tag.getName()).withRel(SHOW_BY_NAME));
             tagDTO.add(linkTo(TagController.class, TagController.class.getMethod("deleteTag", int.class),
                     tag.getId()).withRel(DELETE));
-            tagDTO.add(linkTo(TagController.class, TagController.class.getMethod("showTags",
-                    int.class, int.class), getLastPage(rows, size), size).withRel(SHOW_ALL + "_tags"));
+            tagDTO.add(linkTo(TagController.class, TagController.class.getMethod("getAllTags",
+                    int.class, int.class), Integer.parseInt(DEFAULT_TAG_PAGE_NUMBER), size).withRel(FIRST_PAGE));
+            tagDTO.add(linkTo(TagController.class, TagController.class.getMethod("getAllTags",
+                    int.class, int.class), getLastPage(rows, size), size).withRel(LAST_PAGE));
         } catch (NoSuchMethodException e) {
             throw new MethodDoesNotExistException(e.getMessage(), CODE);
         }
@@ -75,7 +80,9 @@ public class LinkAssembler {
             userDTO.add(linkTo(UserController.class, UserController.class.getMethod("getUserByName",
                     String.class), user.getFirstName()).withRel(SHOW_BY_NAME));
             userDTO.add(linkTo(UserController.class, UserController.class.getMethod("getAllUsers",
-                    int.class, int.class), getLastPage(rows, size), size).withRel(SHOW_ALL + "_users"));
+                    int.class, int.class), Integer.parseInt(DEFAULT_USER_PAGE_NUMBER), size).withRel(FIRST_PAGE));
+            userDTO.add(linkTo(UserController.class, UserController.class.getMethod("getAllUsers",
+                    int.class, int.class), getLastPage(rows, size), size).withRel(LAST_PAGE));
         } catch (NoSuchMethodException e) {
             throw new MethodDoesNotExistException(e.getMessage(), CODE);
         }

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class TagServiceImpl implements TagService {
 
     private static final String CODE = "02";
@@ -26,7 +27,6 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional(isolation=Isolation.REPEATABLE_READ)
     public Tag findById(int id) {
         Tag tag = tagRepository.findById(id);
 
@@ -38,7 +38,6 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional(isolation=Isolation.REPEATABLE_READ)
     public Tag findByName(String name) {
         try {
             return tagRepository.findByName(name);
@@ -48,7 +47,6 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional(isolation=Isolation.REPEATABLE_READ)
     public List<Tag> getAllTags(int pageSize, int offset) {
         if (pageSize > 0 && offset >= 0) {
             return tagRepository.findAll(pageSize, offset);
@@ -58,8 +56,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional(isolation= Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW,
-    rollbackFor = EmptyRequestBodyException.class)
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void addTag(Tag tag) {
         if (tag.getName() == null) {
             throw new EmptyRequestBodyException("Field name is required, please try again!", CODE);
@@ -68,7 +65,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional(isolation=Isolation.SERIALIZABLE, rollbackFor = NoSuchDataException.class)
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void deleteTag(int id) {
         Tag tag = tagRepository.findById(id);
 
@@ -81,16 +78,13 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional(isolation=Isolation.REPEATABLE_READ)
     public Tag getWidelyUsedTag(long id) {
         int tagId = tagRepository.getWidelyUsedTag(id);
         return tagRepository.findById(tagId);
     }
 
     @Override
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public int getNumberOfRows() {
         return Math.toIntExact(tagRepository.getNumberOfRows());
     }
-
 }

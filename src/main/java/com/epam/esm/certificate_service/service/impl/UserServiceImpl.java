@@ -11,7 +11,6 @@ import com.epam.esm.certificate_service.service.UserService;
 import jakarta.persistence.NoResultException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -19,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private static final String CODE = "03";
@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    @Transactional(isolation=Isolation.REPEATABLE_READ)
     public User findById(long id) {
         User user = userRepository.findById(id);
 
@@ -45,7 +44,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(isolation=Isolation.REPEATABLE_READ)
     public User findByName(String userName) {
         try {
             return userRepository.findByFirstName(userName);
@@ -55,7 +53,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(isolation=Isolation.REPEATABLE_READ)
     public List<User> getAllUsers(int pageSize, int offset) {
         if (pageSize > 0 && offset >= 0) {
             return userRepository.findAll(pageSize, offset);
@@ -65,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(isolation=Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
+    @Transactional(isolation=Isolation.SERIALIZABLE)
     public void buyCertificate(User user, String certificateName) {
         GiftCertificate certificate = certificateService.getGiftCertificateByName(certificateName);
 
@@ -82,7 +79,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public int getNumberOfRows() {
         return Math.toIntExact(userRepository.getNumberOfRows());
     }
