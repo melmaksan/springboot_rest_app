@@ -8,16 +8,18 @@ import com.epam.esm.rest_api.dto.CertificateDTO;
 import com.epam.esm.rest_api.dto.Mapper;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.epam.esm.rest_api.Constants.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(value = "/api/certificates", produces = MediaTypes.HAL_JSON_VALUE)
 public class GiftCertificateController {
 
     private final GiftCertificateService giftCertificateService;
@@ -30,128 +32,116 @@ public class GiftCertificateController {
         this.mapper = mapper;
     }
 
-    @GetMapping(value = "/certificates/{id}")
+    @GetMapping(value = "/{id}")
     public CertificateDTO getCertificateById(@PathVariable long id) {
         return mapper.toCertificateDto(giftCertificateService.getGiftCertificateById(id));
     }
 
-    @GetMapping(value = "/certificates/findByName/{name}")
-    public CertificateDTO getGiftCertificateByName(@PathVariable String name) {
+    @GetMapping(value = "/findByName/{name}")
+    public CertificateDTO getCertificateByName(@PathVariable String name) {
         return mapper.toCertificateDto(giftCertificateService.getGiftCertificateByName(name));
     }
 
-    @GetMapping(value = "/certificates/findByPart/{part}")
-    public List<CertificateDTO> getGiftCertificatesByPart(@PathVariable String part) {
-        return giftCertificateService.getGiftCertificatesByPart(part)
+    @GetMapping(value = "/findByPart/{part}")
+    public CollectionModel<CertificateDTO> getGiftCertificatesByPart(@PathVariable String part) {
+        List<CertificateDTO> dtoList = giftCertificateService.getGiftCertificatesByPart(part)
                 .stream().map(mapper::toCertificateDto).collect(Collectors.toList());
-    }
 
-    @GetMapping("/certificates")
-    public CollectionModel<CertificateDTO> getAllCertificates(
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
-        List<GiftCertificate> certificates = giftCertificateService.getAllGiftCertificates(size,
-                (page - 1) * size);
-
-        List<CertificateDTO> dtoList = certificates.stream().map(mapper::toCertificateDto)
-                .collect(Collectors.toList());
-        Link link = linkTo(methodOn(GiftCertificateController.class).getAllCertificates(page, size)).withSelfRel();
+        Link link = linkTo(methodOn(GiftCertificateController.class).getGiftCertificatesByPart(part)).withSelfRel();
 
         return CollectionModel.of(dtoList).add(link);
     }
 
-    @GetMapping(value = "/certificates/ascDate")
-    public CollectionModel<CertificateDTO> getCertificatesAscDate(
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
-        List<GiftCertificate> certificates = giftCertificateService.sortGiftCertificatesByDateAsc(size,
-                (page - 1) * size);
+    @GetMapping
+    public List<CertificateDTO> getAllCertificates(
+            @RequestParam(value = PAGE, required = false, defaultValue = DEFAULT_CERTIFICATE_PAGE_NUMBER) int page,
+            @RequestParam(value = "size", required = false, defaultValue = DEFAULT_CERTIFICATE_PAGE_SIZE) int size) {
+        return giftCertificateService.getAllGiftCertificates(size,
+                (page - 1) * size).stream().map(mapper::toCertificateDto).collect(Collectors.toList());
+    }
 
-        List<CertificateDTO> dtoList = certificates.stream().map(mapper::toCertificateDto)
-                .collect(Collectors.toList());
+    @GetMapping(value = "/ascDate")
+    public CollectionModel<CertificateDTO> getCertificatesAscDate(
+            @RequestParam(value = PAGE, required = false, defaultValue = DEFAULT_CERTIFICATE_PAGE_NUMBER) int page,
+            @RequestParam(value = "size", required = false, defaultValue = DEFAULT_CERTIFICATE_PAGE_SIZE) int size) {
+        List<CertificateDTO> dtoList = giftCertificateService.sortGiftCertificatesByDateAsc(size,
+                (page - 1) * size).stream().map(mapper::toCertificateDto).collect(Collectors.toList());
+
         Link link = linkTo(methodOn(GiftCertificateController.class).getCertificatesAscDate(page, size)).withSelfRel();
 
         return CollectionModel.of(dtoList).add(link);
     }
 
-    @GetMapping(value = "/certificates/descDate")
+    @GetMapping(value = "/descDate")
     public CollectionModel<CertificateDTO> getCertificatesDescDate(
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
-        List<GiftCertificate> certificates = giftCertificateService.sortGiftCertificatesByDateDesc(size,
-                (page - 1) * size);
+            @RequestParam(value = PAGE, required = false, defaultValue = DEFAULT_CERTIFICATE_PAGE_NUMBER) int page,
+            @RequestParam(value = SIZE, required = false, defaultValue = DEFAULT_CERTIFICATE_PAGE_SIZE) int size) {
+        List<CertificateDTO> dtoList = giftCertificateService.sortGiftCertificatesByDateDesc(size,
+                (page - 1) * size).stream().map(mapper::toCertificateDto).collect(Collectors.toList());
 
-        List<CertificateDTO> dtoList = certificates.stream().map(mapper::toCertificateDto)
-                .collect(Collectors.toList());
         Link link = linkTo(methodOn(GiftCertificateController.class).getCertificatesDescDate(page, size)).withSelfRel();
 
         return CollectionModel.of(dtoList).add(link);
     }
 
-    @GetMapping(value = "/certificates/ascName")
+    @GetMapping(value = "/ascName")
     public CollectionModel<CertificateDTO> getCertificatesAscName(
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
-        List<GiftCertificate> certificates = giftCertificateService.sortGiftCertificatesByNameAsc(size,
-                (page - 1) * size);
+            @RequestParam(value = PAGE, required = false, defaultValue = DEFAULT_CERTIFICATE_PAGE_NUMBER) int page,
+            @RequestParam(value = SIZE, required = false, defaultValue = DEFAULT_CERTIFICATE_PAGE_SIZE) int size) {
+        List<CertificateDTO> dtoList = giftCertificateService.sortGiftCertificatesByNameAsc(size,
+                (page - 1) * size).stream().map(mapper::toCertificateDto).collect(Collectors.toList());
 
-        List<CertificateDTO> dtoList = certificates.stream().map(mapper::toCertificateDto)
-                .collect(Collectors.toList());
         Link link = linkTo(methodOn(GiftCertificateController.class).getCertificatesAscName(page, size)).withSelfRel();
 
         return CollectionModel.of(dtoList).add(link);
     }
 
-    @GetMapping(value = "/certificates/descName")
+    @GetMapping(value = "/descName")
     public CollectionModel<CertificateDTO> getCertificatesDescName(
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
-        List<GiftCertificate> certificates = giftCertificateService.sortGiftCertificatesByNameDesc(size,
-                (page - 1) * size);
+            @RequestParam(value = PAGE, required = false, defaultValue = DEFAULT_CERTIFICATE_PAGE_NUMBER) int page,
+            @RequestParam(value = SIZE, required = false, defaultValue = DEFAULT_CERTIFICATE_PAGE_SIZE) int size) {
+        List<CertificateDTO> dtoList = giftCertificateService.sortGiftCertificatesByNameDesc(size,
+                (page - 1) * size).stream().map(mapper::toCertificateDto).collect(Collectors.toList());
 
-        List<CertificateDTO> dtoList = certificates.stream().map(mapper::toCertificateDto)
-                .collect(Collectors.toList());
         Link link = linkTo(methodOn(GiftCertificateController.class).getCertificatesDescName(page, size)).withSelfRel();
 
         return CollectionModel.of(dtoList).add(link);
     }
 
-    @DeleteMapping(value = "/certificates/{id}")
+    @DeleteMapping(value = "/{id}")
     public String deleteCertificate(@PathVariable long id) {
         giftCertificateService.deleteGiftCertificate(id);
         return "Certificate with id = " + id + " was deleted";
     }
 
-    @PostMapping(value = "/certificates")
+    @PostMapping
     public CertificateDTO addCertificate(@RequestBody GiftCertificate giftCertificate) {
         giftCertificateService.addGiftCertificate(giftCertificate);
         return mapper.toCertificateDto(giftCertificateService.getGiftCertificateByName(giftCertificate.getName()));
     }
 
-    @PutMapping(value = "/certificates")
+    @PutMapping
     public CertificateDTO updateCertificate(@RequestBody GiftCertificate giftCertificate) {
         giftCertificateService.updateGiftCertificate(giftCertificate);
         return getCertificateById(giftCertificate.getId());
     }
 
-    @GetMapping(value = "/certificates/findByTag/{name}")
+    @GetMapping(value = "/findByTag/{name}")
     public CollectionModel<CertificateDTO> getGiftCertificatesByTag(@PathVariable String name) {
         Tag tag = tagService.findByName(name);
-        List<GiftCertificate> certificates = tag.getCertificates();
-
-        List<CertificateDTO> dtoList = certificates.stream().map(mapper::toCertificateDto)
+        List<CertificateDTO> dtoList = tag.getCertificates().stream().map(mapper::toCertificateDto)
                 .collect(Collectors.toList());
+
         Link link = linkTo(methodOn(GiftCertificateController.class).getGiftCertificatesByTag(name)).withSelfRel();
 
         return CollectionModel.of(dtoList).add(link);
     }
 
-    @GetMapping(value = "/certificates/findByTags")
+    @GetMapping(value = "/findByTags")
     public CollectionModel<CertificateDTO> getGiftCertificatesByTags(@RequestBody Tag... tags) {
-        List<GiftCertificate> certificateList = giftCertificateService.getCertificatesByTags(tags);
+        List<CertificateDTO> dtoList = giftCertificateService.getCertificatesByTags(tags)
+                .stream().map(mapper::toCertificateDto).collect(Collectors.toList());
 
-        List<CertificateDTO> dtoList = certificateList.stream().map(mapper::toCertificateDto)
-                .collect(Collectors.toList());
         Link link = linkTo(methodOn(GiftCertificateController.class).getGiftCertificatesByTags(tags)).withSelfRel();
 
         return CollectionModel.of(dtoList).add(link);

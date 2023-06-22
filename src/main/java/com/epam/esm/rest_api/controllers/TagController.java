@@ -4,20 +4,16 @@ import com.epam.esm.certificate_service.entities.Tag;
 import com.epam.esm.certificate_service.service.TagService;
 import com.epam.esm.rest_api.dto.Mapper;
 import com.epam.esm.rest_api.dto.TagDTO;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.Link;
-import org.springframework.http.ResponseEntity;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static com.epam.esm.rest_api.Constants.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(value = "/api/tags", produces = MediaTypes.HAL_JSON_VALUE)
 public class TagController {
 
     private final TagService tagService;
@@ -28,42 +24,33 @@ public class TagController {
         this.mapper = mapper;
     }
 
-    @GetMapping(value = "/tags/{id}")
-    public TagDTO showTag(@PathVariable int id) {
+    @GetMapping(value = "/{id}")
+    public TagDTO getTagById(@PathVariable int id) {
         return mapper.toTagDto(tagService.findById(id));
     }
 
-    @GetMapping(value = "/tags/findByName/{name}")
-    public TagDTO getGiftCertificatesByName(@PathVariable String name) {
+    @GetMapping(value = "/findByName/{name}")
+    public TagDTO getTagByName(@PathVariable String name) {
         return mapper.toTagDto(tagService.findByName(name));
     }
 
-    @GetMapping(value = "/tags")
-    public ResponseEntity<CollectionModel<TagDTO>> showTags(
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
-        List<Tag> tagList = tagService.getAllTags(size, (page - 1) * size);
-
-        List<TagDTO> dtoList = tagList.stream().map(mapper::toTagDto).collect(Collectors.toList());
-        Link link = linkTo(methodOn(TagController.class).showTags(page, size)).withSelfRel();
-//        Link deleteTag = linkTo(methodOn(TagController.class).deleteTag(3)).withRel(("delete"));
-
-        CollectionModel<TagDTO> model = CollectionModel.of(dtoList).add(link);
-
-        return ResponseEntity.ok(model);
+    @GetMapping
+    public List<TagDTO> getAllTags(
+            @RequestParam(value = PAGE, required = false, defaultValue = DEFAULT_TAG_PAGE_NUMBER) int page,
+            @RequestParam(value = SIZE, required = false, defaultValue = DEFAULT_TAG_PAGE_SIZE) int size) {
+        return tagService.getAllTags(size, (page - 1) * size)
+                .stream().map(mapper::toTagDto).collect(Collectors.toList());
     }
 
-    @DeleteMapping(value = "/tags/{id}")
+    @DeleteMapping(value = "/{id}")
     public String deleteTag(@PathVariable int id) {
         tagService.deleteTag(id);
         return "Tag with id = " + id + " was deleted";
     }
 
-    @PostMapping(value = "/tags")
+    @PostMapping
     public TagDTO createTag(@RequestBody Tag tag) {
         tagService.addTag(tag);
         return mapper.toTagDto(tagService.findByName(tag.getName()));
     }
-
-
 }

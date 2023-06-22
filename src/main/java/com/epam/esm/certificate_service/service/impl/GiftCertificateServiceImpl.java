@@ -10,6 +10,8 @@ import com.epam.esm.certificate_service.exeption_handling.exeptions.NoSuchDataEx
 import com.epam.esm.certificate_service.service.GiftCertificateService;
 import jakarta.persistence.NoResultException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     private static final String CODE = "01";
@@ -44,13 +47,14 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public GiftCertificate getGiftCertificateByName(String name) {
         try {
             return certificateRepository.findByName(name);
-        } catch (NoResultException ex){
+        } catch (NoResultException ex) {
             throw new NoSuchDataException("There is no certificate with name '" + name + "' in DB", CODE);
         }
     }
 
 
     @Override
+    @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE)
     public void addGiftCertificate(GiftCertificate giftCertificate) {
         giftCertificate.setCreateDate(LocalDateTime.now());
         giftCertificate.setLastUpdateDate(LocalDateTime.now());
@@ -69,6 +73,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE)
     public void updateGiftCertificate(GiftCertificate updateCertificate) {
         GiftCertificate certificate = certificateRepository.findById(updateCertificate.getId());
 
@@ -119,6 +124,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE)
     public void deleteGiftCertificate(long id) {
         GiftCertificate certificate = certificateRepository.findById(id);
 
@@ -192,6 +198,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             }
         }
         return giftCertificates.stream().distinct().collect(Collectors.toList());
+    }
+
+    @Override
+    public int getNumberOfRows() {
+        return Math.toIntExact(certificateRepository.getNumberOfRows());
     }
 
 }

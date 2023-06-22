@@ -6,7 +6,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -42,7 +41,6 @@ public class GiftCertificateRepoImpl implements GiftCertificateRepository {
     }
 
     @Override
-    @Transactional
     public void saveOrUpdate(GiftCertificate certificate) {
         entityManager.merge(certificate);
     }
@@ -93,9 +91,13 @@ public class GiftCertificateRepoImpl implements GiftCertificateRepository {
     }
 
     @Override
-    @Transactional
     public void deleteCertificate(long id) {
         GiftCertificate certificate = entityManager.find(GiftCertificate.class, id);
         entityManager.remove(certificate);
+    }
+
+    @Override
+    public Long getNumberOfRows() {
+        return entityManager.createQuery("select count(g) from GiftCertificate g", Long.class).getSingleResult();
     }
 }

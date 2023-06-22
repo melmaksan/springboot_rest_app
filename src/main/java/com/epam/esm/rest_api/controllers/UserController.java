@@ -2,7 +2,6 @@ package com.epam.esm.rest_api.controllers;
 
 import com.epam.esm.certificate_service.entities.GiftCertificate;
 import com.epam.esm.certificate_service.entities.Order;
-import com.epam.esm.certificate_service.entities.Tag;
 import com.epam.esm.certificate_service.entities.User;
 import com.epam.esm.certificate_service.service.TagService;
 import com.epam.esm.certificate_service.service.UserService;
@@ -11,18 +10,19 @@ import com.epam.esm.rest_api.dto.OrderDTO;
 import com.epam.esm.rest_api.dto.TagDTO;
 import com.epam.esm.rest_api.dto.UserDTO;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.epam.esm.rest_api.Constants.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(value = "/api/users", produces = MediaTypes.HAL_JSON_VALUE)
 public class UserController {
 
     private final UserService userService;
@@ -35,28 +35,25 @@ public class UserController {
         this.tagService = tagService;
     }
 
-    @GetMapping(value = "/users/{id}")
+    @GetMapping(value = "/{id}")
     public UserDTO getUserById(@PathVariable long id) {
         return mapper.toUserDto(userService.findById(id));
     }
 
-    @GetMapping(value = "/users/findByName/{name}")
+    @GetMapping(value = "/findByName/{name}")
     public UserDTO getUserByName(@PathVariable String name) {
         return mapper.toUserDto(userService.findByName(name));
     }
 
-    @GetMapping("/users")
-    public CollectionModel<UserDTO> getAllUsers(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
-                                     @RequestParam(value = "size", required = false, defaultValue = "5") int size) {
-        List<User> users =  userService.getAllUsers(size, (page - 1) * size);
-
-        List<UserDTO> dtoList = users.stream().map(mapper::toUserDto).collect(Collectors.toList());
-        Link link = linkTo(methodOn(UserController.class).getAllUsers(page, size)).withSelfRel();
-
-        return CollectionModel.of(dtoList).add(link);
+    @GetMapping
+    public List<UserDTO> getAllUsers(
+            @RequestParam(value = PAGE, required = false, defaultValue = DEFAULT_USER_PAGE_NUMBER) int page,
+            @RequestParam(value = SIZE, required = false, defaultValue = DEFAULT_USER_PAGE_SIZE) int size) {
+        return userService.getAllUsers(size, (page - 1) * size)
+                .stream().map(mapper::toUserDto).collect(Collectors.toList());
     }
 
-    @GetMapping(value = "/users/{id}/orders")
+    @GetMapping(value = "/{id}/orders")
     public CollectionModel<OrderDTO> getOrdersByUserId(@PathVariable long id) {
         List<Order> orders = userService.findById(id).getOrders();
 
@@ -66,18 +63,15 @@ public class UserController {
         return CollectionModel.of(dtoList).add(link);
     }
 
-    @PostMapping(value = "/users/{id}")
-    public List<OrderDTO> makeOrder(@PathVariable long id, @RequestBody GiftCertificate certificateName) {
+    @PostMapping(value = "/{id}")
+    public CollectionModel<OrderDTO> makeOrder(@PathVariable long id, @RequestBody GiftCertificate certificateName) {
         User user = userService.findById(id);
         userService.buyCertificate(user, certificateName.getName());
-        return user.getOrders().stream().map(mapper::toOrderDto).collect(Collectors.toList());
+        return getOrdersByUserId(id);
     }
 
-    @GetMapping(value = "/users/{id}/mostUsedTag")
-    public EntityModel<TagDTO> getWidelyUsedTag(@PathVariable long id) {
-        TagDTO dto = mapper.toTagDto(tagService.getWidelyUsedTag(id));
-        Link link = linkTo(methodOn(UserController.class).getWidelyUsedTag(id)).withSelfRel();
-
-        return EntityModel.of(dto).add(link);
+    @GetMapping(value = "/{id}/mostUsedTag")
+    public TagDTO getWidelyUsedTag(@PathVariable long id) {
+        return mapper.toTagDto(tagService.getWidelyUsedTag(id));
     }
 }

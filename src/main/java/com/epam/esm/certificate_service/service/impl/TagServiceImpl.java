@@ -8,10 +8,14 @@ import com.epam.esm.certificate_service.exeption_handling.exeptions.NoSuchDataEx
 import com.epam.esm.certificate_service.service.TagService;
 import jakarta.persistence.NoResultException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class TagServiceImpl implements TagService {
 
     private static final String CODE = "02";
@@ -51,11 +55,8 @@ public class TagServiceImpl implements TagService {
         }
     }
 
-//    private boolean checkParams(int pageSize, int offset) {
-//        return pageSize >= 0 && offset > 0;
-//    }
-
     @Override
+    @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE)
     public void addTag(Tag tag) {
         if (tag.getName() == null) {
             throw new EmptyRequestBodyException("Field name is required, please try again!", CODE);
@@ -64,6 +65,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE)
     public void deleteTag(int id) {
         Tag tag = tagRepository.findById(id);
 
@@ -81,4 +83,8 @@ public class TagServiceImpl implements TagService {
         return tagRepository.findById(tagId);
     }
 
+    @Override
+    public int getNumberOfRows() {
+        return Math.toIntExact(tagRepository.getNumberOfRows());
+    }
 }

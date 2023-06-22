@@ -26,4 +26,6 @@ public interface GiftCertificateRepository {
     List<GiftCertificate> ascByName(int pageSize, int offset);
 
     List<GiftCertificate> descByName(int pageSize, int offset);
+
+    Long getNumberOfRows();
 }

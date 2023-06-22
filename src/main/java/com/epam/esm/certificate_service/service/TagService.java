@@ -18,4 +18,5 @@ public interface TagService {
 
     Tag getWidelyUsedTag(long id);
 
+    int getNumberOfRows();
 }

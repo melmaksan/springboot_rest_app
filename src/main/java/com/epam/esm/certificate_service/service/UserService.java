@@ -1,6 +1,5 @@
 package com.epam.esm.certificate_service.service;
 
-
 import com.epam.esm.certificate_service.entities.User;
 
 import java.util.List;
@@ -14,4 +13,6 @@ public interface UserService {
     List<User> getAllUsers(int pageSize, int offset);
 
     void buyCertificate(User user, String certificateName);
+
+    int getNumberOfRows();
 }

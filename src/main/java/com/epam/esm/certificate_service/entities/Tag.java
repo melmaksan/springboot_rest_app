@@ -19,7 +19,8 @@ public class Tag {
     private String name;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH})
+            CascadeType.DETACH, CascadeType.REFRESH},
+            fetch = FetchType.EAGER)
     @JoinTable(name = "gift_certificate_has_tag",
             joinColumns = @JoinColumn(name = "tag_id"),
             inverseJoinColumns = @JoinColumn(name = "gift_certificate_id"))

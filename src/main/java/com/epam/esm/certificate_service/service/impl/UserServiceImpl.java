@@ -10,12 +10,15 @@ import com.epam.esm.certificate_service.service.GiftCertificateService;
 import com.epam.esm.certificate_service.service.UserService;
 import jakarta.persistence.NoResultException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private static final String CODE = "03";
@@ -59,6 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = false, isolation=Isolation.SERIALIZABLE)
     public void buyCertificate(User user, String certificateName) {
         GiftCertificate certificate = certificateService.getGiftCertificateByName(certificateName);
 
@@ -70,6 +74,12 @@ public class UserServiceImpl implements UserService {
         orders.add(order);
 
         user.setOrders(orders);
+
         userRepository.save(user);
+    }
+
+    @Override
+    public int getNumberOfRows() {
+        return Math.toIntExact(userRepository.getNumberOfRows());
     }
 }

@@ -17,4 +17,6 @@ public interface TagRepository {
     void save(Tag tag);
 
     void deleteById(int id);
+
+    Long getNumberOfRows();
 }
