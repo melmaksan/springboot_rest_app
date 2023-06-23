@@ -1,11 +1,14 @@
 package com.epam.esm.certificate_service.service;
 
+import com.epam.esm.DataGenerator;
 import com.epam.esm.certificate_service.entities.Order;
 import com.epam.esm.certificate_service.entities.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBeans;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@MockBeans(@MockBean(DataGenerator.class))
 class UserServiceImplTest {
 
     @Autowired
@@ -67,7 +71,7 @@ class UserServiceImplTest {
     void buyCertificate() {
         List<Order> orders = userService.findById(user1.getId()).getOrders();
 
-        userService.buyCertificate(user1, "MELMAN50");
+        userService.buyCertificate(user1, "Promo_500");
 
         List<Order> expectedOrders = userService.findById(user1.getId()).getOrders();
 

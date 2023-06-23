@@ -1,9 +1,12 @@
 package com.epam.esm.certificate_service.dao;
 
+import com.epam.esm.DataGenerator;
 import com.epam.esm.certificate_service.entities.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBeans;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -11,6 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@MockBeans(@MockBean(DataGenerator.class))
 class UserRepoImplTest {
 
     @Autowired

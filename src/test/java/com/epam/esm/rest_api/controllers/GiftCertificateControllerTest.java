@@ -2,14 +2,14 @@ package com.epam.esm.rest_api.controllers;
 
 import com.epam.esm.certificate_service.entities.GiftCertificate;
 import com.epam.esm.certificate_service.entities.Tag;
-import com.epam.esm.certificate_service.entities.User;
 import com.epam.esm.certificate_service.service.GiftCertificateService;
 import com.epam.esm.certificate_service.service.TagService;
+import com.epam.esm.rest_api.dto.LinkAssembler;
 import com.epam.esm.rest_api.dto.Mapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -33,11 +32,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class GiftCertificateControllerTest {
 
-    private MockMvc mockMvc;
     @Mock
     private TagService tagService;
     @Mock
     private GiftCertificateService certificateService;
+    @InjectMocks
+    private LinkAssembler assembler;
+    private MockMvc mockMvc;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Mapper mapper = new Mapper();
     private GiftCertificate certificate;

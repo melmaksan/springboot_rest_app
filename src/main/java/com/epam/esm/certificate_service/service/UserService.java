@@ -15,4 +15,6 @@ public interface UserService {
     void buyCertificate(User user, String certificateName);
 
     int getNumberOfRows();
+
+    void addUser(User user);
 }

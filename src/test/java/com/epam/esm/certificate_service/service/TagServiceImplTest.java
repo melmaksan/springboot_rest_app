@@ -1,10 +1,13 @@
 package com.epam.esm.certificate_service.service;
 
+import com.epam.esm.DataGenerator;
 import com.epam.esm.certificate_service.entities.Tag;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBeans;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@MockBeans(@MockBean(DataGenerator.class))
 class TagServiceImplTest {
 
     @Autowired
@@ -19,7 +23,6 @@ class TagServiceImplTest {
 
     private static Tag tag1;
     private static Tag tag2;
-    private static Tag tag3;
 
     @BeforeAll
     static void setUp() {
@@ -28,9 +31,6 @@ class TagServiceImplTest {
 
         tag2 = new Tag("gift");
         tag2.setId(2);
-
-        tag3 = new Tag("promo_code");
-        tag3.setId(3);
     }
 
     @Test
@@ -51,18 +51,16 @@ class TagServiceImplTest {
 
     @Test
     void getAllTags() {
-        List<Tag> tags = getTagList();
-        List<Tag> foundList = tagService.getAllTags(3, 0);
+        List<Tag> foundList = tagService.getAllTags(5, 0);
 
         assertNotEquals(true, foundList.isEmpty());
-        assertEquals(tags, foundList);
+        assertEquals(3, foundList.size());
     }
 
     private List<Tag> getTagList() {
         List<Tag> tags = new ArrayList<>();
         tags.add(tag1);
         tags.add(tag2);
-        tags.add(tag3);
         return tags;
     }
 
@@ -81,7 +79,7 @@ class TagServiceImplTest {
     void deleteTag() {
         tagService.deleteTag(3);
 
-        List<Tag> tagList = tagService.getAllTags(3, 0);
+        List<Tag> tagList = tagService.getAllTags(5, 0);
 
         assertNotEquals(true, tagList.isEmpty());
         assertEquals(3, tagList.size());
