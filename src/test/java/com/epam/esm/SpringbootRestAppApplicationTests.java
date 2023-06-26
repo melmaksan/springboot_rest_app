@@ -1,5 +1,6 @@
 package com.epam.esm;
 
+import com.epam.esm.certificate_service.utils.DataGenerator;
 import com.epam.esm.rest_api.controllers.TagController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

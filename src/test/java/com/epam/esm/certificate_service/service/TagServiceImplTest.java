@@ -1,6 +1,6 @@
 package com.epam.esm.certificate_service.service;
 
-import com.epam.esm.DataGenerator;
+import com.epam.esm.certificate_service.utils.DataGenerator;
 import com.epam.esm.certificate_service.entities.Tag;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

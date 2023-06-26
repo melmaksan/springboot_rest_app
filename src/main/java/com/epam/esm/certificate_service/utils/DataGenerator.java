@@ -1,4 +1,4 @@
-package com.epam.esm;
+package com.epam.esm.certificate_service.utils;
 
 import com.epam.esm.certificate_service.entities.GiftCertificate;
 import com.epam.esm.certificate_service.entities.Tag;
@@ -66,22 +66,22 @@ public class DataGenerator {
 
     private void generateCertificates(List<String> tags, List<String> certificates) {
         for (int i = 0; i < 10000; i++) {
-            GiftCertificate certificate = getCertificate(tags, certificates, i);
+            GiftCertificate certificate = createCertificate(tags, certificates, i);
             certificateService.addGiftCertificate(certificate);
         }
     }
 
-    private GiftCertificate getCertificate(List<String> tagsName, List<String> certificates, int index) {
+    private GiftCertificate createCertificate(List<String> tagsName, List<String> certificates, int index) {
         String name = certificates.get(index);
         String description = certificates.get(index + 10000);
         int price = 1 + (int) (Math.random() * 1000);
         int duration = 1 + (int) (Math.random() * 100);
-        List<Tag> tagList = getTagList(tagsName);
+        List<Tag> tagList = createTagList(tagsName);
 
         return new GiftCertificate(name, description, price, duration, tagList);
     }
 
-    private List<Tag> getTagList(List<String> tagsName) {
+    private List<Tag> createTagList(List<String> tagsName) {
         int capacity = 1 + (int) (Math.random() * 3);
         List<Tag> tagList = new ArrayList<>(capacity);
         for (int i = 0; i < capacity; i++) {
