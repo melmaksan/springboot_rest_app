@@ -4,6 +4,7 @@ import com.epam.esm.certificate_service.dao.UserRepository;
 import com.epam.esm.certificate_service.entities.GiftCertificate;
 import com.epam.esm.certificate_service.entities.Order;
 import com.epam.esm.certificate_service.entities.User;
+import com.epam.esm.certificate_service.exeption_handling.exeptions.EmptyRequestBodyException;
 import com.epam.esm.certificate_service.exeption_handling.exeptions.InvalidRequestParamException;
 import com.epam.esm.certificate_service.exeption_handling.exeptions.NoSuchDataException;
 import com.epam.esm.certificate_service.service.GiftCertificateService;
@@ -81,5 +82,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public int getNumberOfRows() {
         return Math.toIntExact(userRepository.getNumberOfRows());
+    }
+
+    @Override
+    @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE)
+    public void addUser(User user) {
+        if (user.getFirstName() == null || user.getSurname() == null || user.getEmail() == null) {
+            throw new EmptyRequestBodyException("Field firstname, surname and email are required, " +
+                    "please try again!", CODE);
+        }
+        userRepository.save(user);
     }
 }

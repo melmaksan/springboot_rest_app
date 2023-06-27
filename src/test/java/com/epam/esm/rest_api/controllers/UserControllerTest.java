@@ -4,12 +4,15 @@ import com.epam.esm.certificate_service.entities.GiftCertificate;
 import com.epam.esm.certificate_service.entities.Order;
 import com.epam.esm.certificate_service.entities.Tag;
 import com.epam.esm.certificate_service.entities.User;
+import com.epam.esm.certificate_service.service.GiftCertificateService;
 import com.epam.esm.certificate_service.service.TagService;
 import com.epam.esm.certificate_service.service.UserService;
+import com.epam.esm.rest_api.dto.LinkAssembler;
 import com.epam.esm.rest_api.dto.Mapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
@@ -33,13 +36,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class UserControllerTest {
 
-    private MockMvc mockMvc;
     @Mock
     private TagService tagService;
     @Mock
     private UserService userService;
+    @Mock
+    private GiftCertificateService certificateService;
+    @InjectMocks
+    private LinkAssembler assembler;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Mapper mapper = new Mapper();
+    private MockMvc mockMvc;
     private User user;
 
     @BeforeEach

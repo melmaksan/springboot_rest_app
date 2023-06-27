@@ -14,6 +14,12 @@ import static com.epam.esm.rest_api.dto.LinkAssembler.*;
 @Component
 public class Mapper {
 
+    /**
+     * Method converts certificate entity to DTO
+     *
+     * @param certificate entity that will be converted
+     * @return certificate DTO
+     */
     public CertificateDTO toCertificateDto(GiftCertificate certificate) {
         long id = certificate.getId();
         String name = certificate.getName();
@@ -32,6 +38,12 @@ public class Mapper {
         return certificateDTO;
     }
 
+    /**
+     * Method converts tag entity to DTO
+     *
+     * @param tag entity that will be converted
+     * @return tag DTO
+     */
     public TagDTO toTagDto(Tag tag) {
         TagDTO tagDTO = new TagDTO(tag.getId(), tag.getName());
         addLinksToTagDTO(tag, tagDTO);
@@ -39,6 +51,12 @@ public class Mapper {
         return tagDTO;
     }
 
+    /**
+     * Method converts user entity to DTO
+     *
+     * @param user entity that will be converted
+     * @return user DTO
+     */
     public UserDTO toUserDto(User user) {
         long id = user.getId();
         String name = user.getFirstName();
@@ -51,6 +69,12 @@ public class Mapper {
         return userDTO;
     }
 
+    /**
+     * Method converts order entity to DTO
+     *
+     * @param order entity that will be converted
+     * @return order DTO
+     */
     public OrderDTO toOrderDto(Order order) {
         long id = order.getId();
         int price = order.getPrice();

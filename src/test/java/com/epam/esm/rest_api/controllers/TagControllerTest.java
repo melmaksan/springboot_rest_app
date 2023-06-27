@@ -1,14 +1,20 @@
 package com.epam.esm.rest_api.controllers;
 
 import com.epam.esm.certificate_service.entities.Tag;
+import com.epam.esm.certificate_service.service.GiftCertificateService;
 import com.epam.esm.certificate_service.service.TagService;
+import com.epam.esm.certificate_service.service.UserService;
+import com.epam.esm.rest_api.dto.LinkAssembler;
 import com.epam.esm.rest_api.dto.Mapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBeans;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -17,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -29,6 +34,8 @@ class TagControllerTest {
 
     @Mock
     private TagService tagService;
+    @InjectMocks
+    private LinkAssembler assembler;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Mapper mapper = new Mapper();
     private MockMvc mockMvc;

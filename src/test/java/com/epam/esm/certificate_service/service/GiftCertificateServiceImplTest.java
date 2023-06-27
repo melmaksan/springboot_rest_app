@@ -1,11 +1,14 @@
 package com.epam.esm.certificate_service.service;
 
+import com.epam.esm.certificate_service.utils.DataGenerator;
 import com.epam.esm.certificate_service.entities.GiftCertificate;
 import com.epam.esm.certificate_service.entities.Tag;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBeans;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,6 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@MockBeans(@MockBean(DataGenerator.class))
 class GiftCertificateServiceImplTest {
 
     @Autowired
@@ -99,7 +103,7 @@ class GiftCertificateServiceImplTest {
         List<GiftCertificate> certificates = certificateService.getAllGiftCertificates(6, 0);
 
         assertNotEquals(true, certificates.isEmpty());
-        assertEquals(6, certificates.size());
+        assertEquals(5, certificates.size());
     }
 
     @Test
@@ -162,6 +166,6 @@ class GiftCertificateServiceImplTest {
         List<GiftCertificate> certificates = certificateService.getCertificatesByTags(tags);
 
         assertNotEquals(true, certificates.isEmpty());
-        assertEquals(4, certificates.size(), "should be 4 certificates");
+        assertEquals(3, certificates.size(), "should be 3 certificates");
     }
 }

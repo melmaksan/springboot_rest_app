@@ -2,7 +2,6 @@ package com.epam.esm.certificate_service.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 import java.util.Objects;
