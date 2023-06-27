@@ -28,6 +28,12 @@ public class LinkAssembler {
         LinkAssembler.certificateService = certificateService;
     }
 
+    /**
+     * This method adds links to certificate DTO
+     *
+     * @param certificate entity that will be converted
+     * @param certificateDTO DTO to which links are added
+     */
     static void addLinksToCertificateDTO(GiftCertificate certificate, CertificateDTO certificateDTO) {
         int rows = certificateService.getNumberOfRows();
         int size = Integer.parseInt(DEFAULT_CERTIFICATE_PAGE_SIZE);
@@ -52,6 +58,12 @@ public class LinkAssembler {
         }
     }
 
+    /**
+     * This method adds links to tag DTO
+     *
+     * @param tag entity that will be converted
+     * @param tagDTO DTO to which links are added
+     */
     static void addLinksToTagDTO(Tag tag, TagDTO tagDTO) {
         int rows = tagService.getNumberOfRows();
         int size = Integer.parseInt(DEFAULT_TAG_PAGE_SIZE);
@@ -71,6 +83,12 @@ public class LinkAssembler {
         }
     }
 
+    /**
+     * This method adds links to user DTO
+     *
+     * @param user entity that will be converted
+     * @param userDTO DTO to which links are added
+     */
     static void addLinksToUserDTO(User user, UserDTO userDTO) {
         int rows = userService.getNumberOfRows();
         int size = Integer.parseInt(DEFAULT_USER_PAGE_SIZE);

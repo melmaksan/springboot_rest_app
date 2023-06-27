@@ -33,6 +33,9 @@ public class DataGenerator {
         this.certificateService = certificateService;
     }
 
+    /**
+     * This method generates data when the application run
+     */
     @EventListener({ContextRefreshedEvent.class})
     public void onApplicationEvent() {
         try {

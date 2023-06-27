@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = false, isolation = Isolation.SERIALIZABLE)
     public void addUser(User user) {
         if (user.getFirstName() == null || user.getSurname() == null || user.getEmail() == null) {
-            throw new EmptyRequestBodyException("Field name, surname and email are required, " +
+            throw new EmptyRequestBodyException("Field firstname, surname and email are required, " +
                     "please try again!", CODE);
         }
         userRepository.save(user);
